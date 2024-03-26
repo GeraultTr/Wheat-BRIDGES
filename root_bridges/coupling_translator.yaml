@@ -1,0 +1,184 @@
+RootAnatomy:
+  RootAnatomy: {}
+  RootCarbonModelCoupled: {}
+  RootGrowthModel:
+    distance_from_tip:
+      distance_from_tip: 1.0
+    length:
+      length: 1.0
+    radius:
+      radius: 1.0
+    root_hair_length:
+      root_hair_length: 1.0
+    struct_mass:
+      struct_mass: 1.0
+    total_root_hairs_number:
+      total_root_hairs_number: 1.0
+  RootNitrogenModelCoupled: {}
+  RootWaterModel: {}
+  SoilModel: {}
+  WheatFSPM: {}
+RootCarbonModelCoupled:
+  RootAnatomy:
+    apoplasmic_exchange_surface:
+      apoplasmic_exchange_surface: 1.0
+    root_exchange_surface:
+      root_exchange_surface: 1.0
+    symplasmic_volume:
+      symplasmic_volume: 1.0
+  RootCarbonModelCoupled: {}
+  RootGrowthModel:
+    distance_from_tip:
+      distance_from_tip: 1.0
+    hexose_consumption_by_growth:
+      hexose_consumption_by_growth: 1.0
+    initial_struct_mass:
+      initial_struct_mass: 1.0
+    length:
+      length: 1.0
+    living_root_hairs_struct_mass:
+      living_root_hairs_struct_mass: 1.0
+    radius:
+      radius: 1.0
+    struct_mass:
+      struct_mass: 1.0
+    type:
+      type: 1.0
+  RootNitrogenModelCoupled: {}
+  RootWaterModel: {}
+  SoilModel:
+    C_hexose_soil:
+      C_hexose_soil: 1.0
+    Cs_cells_soil:
+      Cs_cells_soil: 1.0
+    Cs_mucilage_soil:
+      Cs_mucilage_soil: 1.0
+    soil_temperature_in_Celsius:
+      soil_temperature_in_Celsius: 1.0
+  WheatFSPM:
+    sucrose_input_rate:
+      Unloading_Sucrose: 1.0
+RootGrowthModel:
+  RootAnatomy:
+    root_tissue_density:
+      root_tissue_density: 1.0
+  RootCarbonModelCoupled: {}
+  RootGrowthModel: {}
+  RootNitrogenModelCoupled: {}
+  RootWaterModel: {}
+  SoilModel:
+    soil_temperature_in_Celsius:
+      soil_temperature_in_Celsius: 1.0
+  WheatFSPM: {}
+RootNitrogenModelCoupled:
+  RootAnatomy:
+    cortex_exchange_surface:
+      cortex_exchange_surface: 1.0
+    endodermis_conductance_factor:
+      endodermis_conductance_factor: 1.0
+    phloem_exchange_surface:
+      phloem_exchange_surface: 1.0
+    root_exchange_surface:
+      root_exchange_surface: 1.0
+    xylem_differentiation_factor:
+      xylem_differentiation_factor: 1.0
+  RootCarbonModelCoupled:
+    C_hexose_reserve:
+      C_hexose_reserve: 1.0
+    C_hexose_root:
+      C_hexose_root: 1.0
+  RootGrowthModel:
+    initial_struct_mass:
+      initial_struct_mass: 1.0
+    length:
+      length: 1.0
+    radius:
+      radius: 1.0
+    struct_mass:
+      struct_mass: 1.0
+    struct_mass_produced:
+      struct_mass_produced: 1.0
+    thermal_time_since_emergence:
+      thermal_time_since_emergence: 1.0
+  RootNitrogenModelCoupled: {}
+  RootWaterModel:
+    axial_export_water_up:
+      axial_export_water_up: 1.0
+    axial_import_water_down:
+      axial_import_water_down: 1.0
+    xylem_water:
+      xylem_water: 1.0
+  SoilModel:
+    soil_AA:
+      C_AA_soil: 1.0
+    soil_Nm:
+      C_mineralN_soil: 1.0
+  WheatFSPM:
+    AA_root_shoot_phloem:
+      Unloading_Amino_Acids: 1.0
+    cytokinins_root_shoot_xylem:
+      Export_cytokinins: 1.0
+RootWaterModel:
+  RootAnatomy:
+    apoplasmic_exchange_surface:
+      apoplasmic_exchange_surface: 1.0
+    cortex_exchange_surface:
+      cortex_exchange_surface: 1.0
+    xylem_volume:
+      xylem_volume: 1.0
+  RootCarbonModelCoupled: {}
+  RootGrowthModel:
+    length:
+      length: 1.0
+    radius:
+      radius: 1.0
+    struct_mass:
+      struct_mass: 1.0
+  RootNitrogenModelCoupled: {}
+  RootWaterModel: {}
+  SoilModel:
+    soil_temperature:
+      soil_temperature_in_Celsius: 1.0
+    soil_water_pressure:
+      water_potential_soil: 1.0
+  WheatFSPM:
+    water_root_shoot_xylem:
+      Total_Transpiration: 1.0
+SoilModel:
+  RootAnatomy:
+    root_exchange_surface:
+      root_exchange_surface: 1.0
+  RootCarbonModelCoupled:
+    cells_release:
+      cells_release: 1.0
+    hexose_exudation:
+      hexose_exudation: 1.0
+    hexose_uptake_from_soil:
+      hexose_uptake_from_soil: 1.0
+    mucilage_secretion:
+      mucilage_secretion: 1.0
+    phloem_hexose_exudation:
+      phloem_hexose_exudation: 1.0
+    phloem_hexose_uptake_from_soil:
+      phloem_hexose_uptake_from_soil: 1.0
+  RootGrowthModel:
+    struct_mass:
+      struct_mass: 1.0
+  RootNitrogenModelCoupled: {}
+  RootWaterModel: {}
+  SoilModel: {}
+  WheatFSPM: {}
+WheatFSPM:
+  RootAnatomy: {}
+  RootCarbonModelCoupled: {}
+  RootGrowthModel: {}
+  RootNitrogenModelCoupled:
+    Amino_Acids_import:
+      export_AA: 1.0
+    Nitrates_import:
+      export_Nm: 1.0
+    cytokinins:
+      total_cytokinins: 1.0
+  RootWaterModel: {}
+  SoilModel: {}
+  WheatFSPM: {}

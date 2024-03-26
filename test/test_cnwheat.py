@@ -13,7 +13,7 @@ def single_run(scenario, outputs_dirpath="test/outputs"):
                     recording_images=False, plotted_property="C_hexose_root",
                     recording_mtg=False,
                     recording_raw=False,
-                    recording_sums=True,
+                    recording_sums=False,
                     recording_performance=True,
                     echo=True)
     

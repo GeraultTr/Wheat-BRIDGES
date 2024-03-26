@@ -47,16 +47,18 @@ class Model(CompositeModel):
 
         # INIT INDIVIDUAL MODULES
         self.root_growth = RootGrowthModel(time_step, **scenario)
-        self.g = self.root_growth.g
-        self.root_anatomy = RootAnatomy(self.g, time_step, **scenario)
-        self.root_water = RootWaterModel(self.g, time_step, **scenario)
-        self.root_carbon = RootCarbonModelCoupled(self.g, time_step, **scenario)
-        self.root_nitrogen = RootNitrogenModelCoupled(self.g, time_step, **scenario)
-        self.soil = SoilModel(self.g, time_step, **scenario)
+        self.g_root = self.root_growth.g
+        self.root_anatomy = RootAnatomy(self.g_root, time_step, **scenario)
+        self.root_water = RootWaterModel(self.g_root, time_step, **scenario)
+        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step, **scenario)
+        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **scenario)
+        self.soil = SoilModel(self.g_root, time_step, **scenario)
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="test/inputs"))
+        self.g_shoot = self.shoot.g
 
         # EXPECTED !
         self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_carbon, self.root_nitrogen, self.soil, self.shoot)
+        self.mtgs = {"root": self.g_root, "shoot": self.g_shoot}
 
         # LINKING MODULES
         self.link_around_mtg(translator_path=root_bridges.__path__[0])
