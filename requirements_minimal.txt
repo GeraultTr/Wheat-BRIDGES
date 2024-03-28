@@ -20,7 +20,7 @@ netcdf4
 dask
 #charset-normalizer
 bottleneck
-pandas
+pandas=1.3.5
 numpy
 scipy
 matplotlib
