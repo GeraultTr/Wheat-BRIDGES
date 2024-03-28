@@ -57,7 +57,7 @@ RootCarbonModelCoupled:
       soil_temperature_in_Celsius: 1.0
   WheatFSPM:
     sucrose_input_rate:
-      Unloading_Sucrose: 1.0
+      Unloading_Sucrose: 0.000001 / 3600
 RootGrowthModel:
   RootAnatomy:
     root_tissue_density:
@@ -115,9 +115,9 @@ RootNitrogenModelCoupled:
       C_mineralN_soil: 1.0
   WheatFSPM:
     AA_root_shoot_phloem:
-      Unloading_Amino_Acids: 1.0
+      Unloading_Amino_Acids: 0.000001 / 3600
     cytokinins_root_shoot_xylem:
-      Export_cytokinins: 1.0
+      Export_cytokinins: 1.0 / 3600
 RootWaterModel:
   RootAnatomy:
     apoplasmic_exchange_surface:
@@ -143,7 +143,7 @@ RootWaterModel:
       water_potential_soil: 1.0
   WheatFSPM:
     water_root_shoot_xylem:
-      Total_Transpiration: 1.0
+      Total_Transpiration: 0.001
 SoilModel:
   RootAnatomy:
     root_exchange_surface:
@@ -172,15 +172,15 @@ WheatFSPM:
   RootAnatomy: {}
   RootCarbonModelCoupled:
     sucrose:
-      total_sucrose_root: 1.0
+      total_sucrose_root: 1000000
     mstruct:
       total_living_struct_mass: 1.0
   RootGrowthModel: {}
   RootNitrogenModelCoupled:
     Export_Amino_Acids:
-      AA_root_shoot_xylem: 1.0
+      AA_root_shoot_xylem: 3600 * 1000000
     Export_Nitrates:
-      Nm_root_shoot_xylem: 1.0
+      Nm_root_shoot_xylem: 1.4 * 3600 * 1000000
     cytokinins:
       total_cytokinins: 1.0
   RootWaterModel: {}
