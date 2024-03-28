@@ -4,3 +4,6 @@
 [submodule "root_cynaps"]
 	path = root_cynaps
 	url = https://github.com/GeraultTr/Root_CyNAPS.git
+[submodule "WheatFspm"]
+	path = WheatFspm
+	url = https://github.com/GeraultTr/WheatFspm.git
