@@ -1,7 +1,7 @@
 {% set data = load_setup_py_data() %}
 
 package:
-  name: openalea.root_bridges
+  name: openalea.wheat_bridges
   version: {{ data.get('version') }}
 
 source:
@@ -34,6 +34,7 @@ test:
     - root_cynaps
     - data_utility
     - genericmodel
+    - fspm-wheat
   source_files:
     - test/**
   commands:
