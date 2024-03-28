@@ -58,19 +58,16 @@ class Model(CompositeModel):
 
         # EXPECTED !
         self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_carbon, self.root_nitrogen, self.soil, self.shoot)
-        self.mtgs = {"root": self.g_root, "shoot": self.g_shoot}
+        self.mtgs = {"root": self.g_root, "shoot": self.g_shoot} # TODO May be optionnal, see later
 
         # LINKING MODULES
         self.link_around_mtg(translator_path=root_bridges.__path__[0])
-
-        # Some initialization must be performed AFTER linking modules
-        [m.post_coupling_init() for m in self.models]
 
     def run(self):
         # Update environment boundary conditions
         self.soil()
 
-        # Compute shoot flows and state balance
+        # Compute shoot flows and state balance for CN-wheat
         self.shoot()
 
         # Compute root growth from resulting states
@@ -86,13 +83,7 @@ class Model(CompositeModel):
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
 
-        # Compute state variations for water and then carbon and nitrogen
+        # Compute rate -> state variations for water and then carbon and nitrogen
         self.root_water()
         self.root_carbon()
         self.root_nitrogen()
-
-        # TODO, introduce possibility of no priority between carbon and nitrogen resolution
-        #self.root_nitrogen(specific_process=["rate", "stepinit"])
-        #self.root_carbon(specifi_process=["rate"])
-        #self.root_nitrogen(excluded_process=["rate", "stepinit"])
-        #self.root_carbon(excluded_process=["rate"])

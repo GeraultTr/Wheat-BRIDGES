@@ -170,13 +170,17 @@ SoilModel:
   WheatFSPM: {}
 WheatFSPM:
   RootAnatomy: {}
-  RootCarbonModelCoupled: {}
+  RootCarbonModelCoupled:
+    sucrose:
+      total_sucrose_root: 1.0
+    mstruct:
+      total_living_struct_mass: 1.0
   RootGrowthModel: {}
   RootNitrogenModelCoupled:
-    Amino_Acids_import:
-      export_AA: 1.0
-    Nitrates_import:
-      export_Nm: 1.0
+    Export_Amino_Acids:
+      AA_root_shoot_xylem: 1.0
+    Export_Nitrates:
+      Nm_root_shoot_xylem: 1.0
     cytokinins:
       total_cytokinins: 1.0
   RootWaterModel: {}
