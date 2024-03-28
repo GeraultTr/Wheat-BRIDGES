@@ -35,16 +35,16 @@ if sys.version_info < (3, 9):
     sys.exit(1)
 
 setup(
-    name="Root_BRIDGES",
-    version="0.1.0",
-    packages=["root_bridges", "simulations", "test"],
+    name="Wheat_BRIDGES",
+    version="0.0.1",
+    packages=["wheat_bridges", "simulations", "test"],
     include_package_data=True,
-    author="T.Grault, F.Rees, R.Barillot and C.Pradal",
+    author="T.Gerault, F.Rees, R.Barillot and C.Pradal",
     author_email="tristan.gerault@inrae.fr, frederic.rees@inrae.fr, romain.barillot@inrae.fr, christophe.pradal@cirad.fr",
-    description="Root_BRIDGES is a model of root CNW physiology at root segment scale",
+    description="Wheat_BRIDGES is a model of root-shoot CNW physiology at root segment scale",
     long_description="""TODO""",
     license="CeCILL-C",
     keywords="functional-structural plant model, wheat, uptake, rhizodeposition, trophic status, carbon, nitrogen, metabolism, remobilisation, source-sink relation, resource allocation",
-    url="https://github.com/GeraultTr/Root_BRIDGES",
-    download_url="https://github.com/GeraultTr/Root_BRIDGES.git"
+    url="https://github.com/GeraultTr/Wheat_BRIDGES",
+    download_url="https://github.com/GeraultTr/Wheat_BRIDGES.git"
 )

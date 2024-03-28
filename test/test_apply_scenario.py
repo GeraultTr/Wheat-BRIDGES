@@ -1,5 +1,5 @@
 import os
-from root_bridges.root_bridges import Model
+from wheat_bridges.root_bridges import Model
 from log.logging import Logger
 from analyze.analyze import analyze_data
 from initialize.initialize import MakeScenarios as ms

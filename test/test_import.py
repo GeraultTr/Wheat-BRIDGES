@@ -1,1 +1,1 @@
-from root_bridges import Model
+from wheat_bridges import Model

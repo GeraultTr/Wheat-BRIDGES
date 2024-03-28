@@ -1,7 +1,7 @@
 import os
 import pickle
 
-import root_bridges
+import wheat_bridges
 
 # Edited models
 from root_bridges.root_carbon import RootCarbonModelCoupled
@@ -14,7 +14,8 @@ from rhizodep.rhizo_soil import SoilModel
 
 from root_cynaps.root_water import RootWaterModel
 
-from Data_enforcer.shoot import ShootModel
+# from Data_enforcer.shoot import ShootModel
+from fspmwheat.simulation import WheatFSPM, scenario_utility
 
 # Utilities
 from metafspm.composite_wrapper import CompositeModel
@@ -46,36 +47,35 @@ class Model(CompositeModel):
 
         # INIT INDIVIDUAL MODULES
         self.root_growth = RootGrowthModel(time_step, **scenario)
-        self.g = self.root_growth.g
-        self.root_anatomy = RootAnatomy(self.g, time_step, **scenario)
-        self.root_water = RootWaterModel(self.g, time_step, **scenario)
-        self.root_carbon = RootCarbonModelCoupled(self.g, time_step, **scenario)
-        self.root_nitrogen = RootNitrogenModelCoupled(self.g, time_step, **scenario)
-        self.soil = SoilModel(self.g, time_step, **scenario)
-
-        # Initialisation of Shoot modules
-        self.shoot = ShootModel(self.g)
+        self.g_root = self.root_growth.g
+        self.root_anatomy = RootAnatomy(self.g_root, time_step, **scenario)
+        self.root_water = RootWaterModel(self.g_root, time_step, **scenario)
+        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step, **scenario)
+        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **scenario)
+        self.soil = SoilModel(self.g_root, time_step, **scenario)
+        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="test/inputs", isolated_roots = True, cnwheat_roots = False))
+        self.g_shoot = self.shoot.g
 
         # EXPECTED !
         self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_carbon, self.root_nitrogen, self.soil, self.shoot)
+        self.mtgs = {"root": self.g_root, "shoot": self.g_shoot} # TODO May be optionnal, see later
 
         # LINKING MODULES
-        self.link_around_mtg(translator_path=root_bridges.__path__[0])
+        self.link_around_mtg(translator_path=wheat_bridges.__path__[0])
 
-        # Some initialization must be performed AFTER linking modules
-        [m.post_coupling_init() for m in self.models]
+        self.root_water.post_coupling_init()
 
     def run(self):
         # Update environment boundary conditions
         self.soil()
 
-        # Compute shoot flows and state balance
+        # Compute shoot flows and state balance for CN-wheat
         self.shoot()
 
         # Compute root growth from resulting states
         self.root_growth()
         
-        # TODO
+        # Extend property dictionnaries after growth
         self.root_anatomy.post_growth_updating()
         self.root_water.post_growth_updating()
         self.root_carbon.post_growth_updating()
@@ -85,11 +85,7 @@ class Model(CompositeModel):
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
 
-        # Compute state variations for water and then carbon and nitrogen
+        # Compute rate -> state variations for water and then carbon and nitrogen
         self.root_water()
         self.root_carbon()
         self.root_nitrogen()
-        #self.root_nitrogen(specific_process=["rate", "stepinit"])
-        #self.root_carbon(specifi_process=["rate"])
-        #self.root_nitrogen(excluded_process=["rate", "stepinit"])
-        #self.root_carbon(excluded_process=["rate"])

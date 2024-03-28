@@ -1,4 +1,4 @@
-from root_bridges.coupled_simulation import run_coupled_simulation
+from wheat_bridges.coupled_simulation import run_coupled_simulation
 from datetime import datetime
 import os
 import shutil
