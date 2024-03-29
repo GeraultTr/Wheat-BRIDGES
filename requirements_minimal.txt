@@ -1,4 +1,4 @@
-# use : mamba create -y -n wheat-bridges -c conda-forge -c openalea3 --strict-channel-priority --file requirements.txt
+# use : mamba create -y -n wheat-bridges -c openalea3 -c conda-forge --strict-channel-priority --file requirements.txt
 # then clone https://github.com/openalea-incubator/caribu.git
 # cd to folder and run "scons" to build it
 # then run python -m setup.py install
