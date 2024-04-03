@@ -6,15 +6,14 @@ import wheat_bridges
 # Edited models
 from root_bridges.root_carbon import RootCarbonModelCoupled
 from root_bridges.root_nitrogen import RootNitrogenModelCoupled
+from root_bridges.root_growth import RootGrowthModelCoupled
+from root_bridges.soil_model import SoilModel
 
 # Untouched models
-from rhizodep.root_growth import RootGrowthModel
 from rhizodep.root_anatomy import RootAnatomy
-from rhizodep.rhizo_soil import SoilModel
-
 from root_cynaps.root_water import RootWaterModel
 
-# from Data_enforcer.shoot import ShootModel
+# Shoot Model
 from fspmwheat.simulation import WheatFSPM, scenario_utility
 
 # Utilities
@@ -46,7 +45,7 @@ class Model(CompositeModel):
         """
 
         # INIT INDIVIDUAL MODULES
-        self.root_growth = RootGrowthModel(time_step, **scenario)
+        self.root_growth = RootGrowthModelCoupled(time_step, **scenario)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **scenario)
         self.root_water = RootWaterModel(self.g_root, time_step, **scenario)

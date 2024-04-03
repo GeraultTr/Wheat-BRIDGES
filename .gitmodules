@@ -1,9 +1,6 @@
-[submodule "rhizodep"]
-	path = rhizodep
-	url = https://github.com/GeraultTr/Rhizodep.git
-[submodule "root_cynaps"]
-	path = root_cynaps
-	url = https://github.com/GeraultTr/Root_CyNAPS.git
+[submodule "Root_BRIDGES"]
+	path = Root_BRIDGES
+	url = https://github.com/GeraultTr/Root_BRIDGES.git
 [submodule "WheatFspm"]
 	path = WheatFspm
 	url = https://github.com/GeraultTr/WheatFspm.git

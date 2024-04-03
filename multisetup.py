@@ -37,8 +37,7 @@ from openalea.deploy.multisetup import Multisetup
 
 
 dirs = """
-rhizodep
-root_cynaps
+Root_BRIDGES
 WheatFspm
 """.split()
 
