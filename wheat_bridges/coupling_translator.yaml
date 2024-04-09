@@ -94,6 +94,10 @@ RootNitrogenModelCoupled:
       root_exchange_surface: 1.0
     xylem_differentiation_factor:
       xylem_differentiation_factor: 1.0
+    symplasmic_volume:
+      symplasmic_volume: 1.0
+    xylem_volume:
+      xylem_volume: 1.0
   RootCarbonModelCoupled:
     C_hexose_reserve:
       C_hexose_reserve: 1.0

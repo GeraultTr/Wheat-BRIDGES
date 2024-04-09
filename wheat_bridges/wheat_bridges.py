@@ -18,6 +18,7 @@ from fspmwheat.simulation import WheatFSPM, scenario_utility
 
 # Utilities
 from metafspm.composite_wrapper import CompositeModel
+from metafspm.component_factory import Choregrapher
 
 
 class Model(CompositeModel):
@@ -43,21 +44,25 @@ class Model(CompositeModel):
         :param g: the openalea.MTG() instance that will be worked on. It must be representative of a root architecture.
         :param time_step: the resolution time_step of the model in seconds.
         """
+        # DECLARE GLOBAL SIMULATION TIME STEP
+        Choregrapher().add_simulation_time_step(time_step)
 
         # INIT INDIVIDUAL MODULES
         self.root_growth = RootGrowthModelCoupled(time_step, **scenario)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **scenario)
-        self.root_water = RootWaterModel(self.g_root, time_step, **scenario)
+        self.root_water = RootWaterModel(self.g_root, time_step/10, **scenario)
         self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step, **scenario)
         self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **scenario)
         self.soil = SoilModel(self.g_root, time_step, **scenario)
-        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="test/inputs", isolated_roots = True, cnwheat_roots = False))
+        self.soil_voxels = self.soil.voxels
+        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", isolated_roots=True, cnwheat_roots=False))
         self.g_shoot = self.shoot.g
+        print(self.root_growth.choregrapher.sub_time_step)
 
         # EXPECTED !
         self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_carbon, self.root_nitrogen, self.soil, self.shoot)
-        self.mtgs = {"root": self.g_root, "shoot": self.g_shoot} # TODO May be optionnal, see later
+        self.data_structures = {"root": self.g_root, "shoot": self.g_shoot, "soil": self.soil_voxels}
 
         # LINKING MODULES
         self.link_around_mtg(translator_path=wheat_bridges.__path__[0])
@@ -73,8 +78,8 @@ class Model(CompositeModel):
 
         # Compute root growth from resulting states
         self.root_growth()
-        
-        # Extend property dictionnaries after growth
+
+        # Extend property dictionaries after growth
         self.root_anatomy.post_growth_updating()
         self.root_water.post_growth_updating()
         self.root_carbon.post_growth_updating()
@@ -88,3 +93,5 @@ class Model(CompositeModel):
         self.root_water()
         self.root_carbon()
         self.root_nitrogen()
+
+
