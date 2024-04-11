@@ -89,4 +89,3 @@ class Model(CompositeModel):
         self.root_water()
         self.root_carbon()
         self.root_nitrogen()
-        print(len(self.root_carbon.vertices))
