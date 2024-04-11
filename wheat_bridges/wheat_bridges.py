@@ -1,6 +1,3 @@
-import os
-import pickle
-
 import wheat_bridges
 
 # Edited models
@@ -26,7 +23,7 @@ class Model(CompositeModel):
     Root-BRIDGES model
 
     Use guideline :
-    1. store in a variable Model(g, time_step) to initialize the model, g being an openalea.MTG() object and time_step an time interval in seconds.
+    1. store in a variable Model(g, time_step) to initialize the model, g being an openalea.MTG() object and time_step a time interval in seconds.
 
     2. print Model.documentation for more information about editable model parameters (optional).
 
@@ -52,13 +49,12 @@ class Model(CompositeModel):
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **scenario)
         self.root_water = RootWaterModel(self.g_root, time_step/10, **scenario)
-        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step, **scenario)
+        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **scenario)
         self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **scenario)
         self.soil = SoilModel(self.g_root, time_step, **scenario)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", isolated_roots=True, cnwheat_roots=False))
         self.g_shoot = self.shoot.g
-        print(self.root_growth.choregrapher.sub_time_step)
 
         # EXPECTED !
         self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_carbon, self.root_nitrogen, self.soil, self.shoot)
@@ -93,5 +89,4 @@ class Model(CompositeModel):
         self.root_water()
         self.root_carbon()
         self.root_nitrogen()
-
-
+        print(len(self.root_carbon.vertices))
