@@ -11,7 +11,7 @@ def single_run(scenario, outputs_dirpath="outputs"):
     logger = Logger(model_instance=whole_plant, outputs_dirpath=outputs_dirpath, 
                     time_step_in_hours=1,
                     logging_period_in_hours=1,
-                    recording_images=False, plotted_property="C_hexose_root",
+                    recording_images=True, plotted_property="C_hexose_root", show_soil=False,
                     recording_mtg=False,
                     recording_raw=False,
                     recording_sums=True,
