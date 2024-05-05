@@ -46,18 +46,19 @@ class Model(CompositeModel):
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
         parameters = scenario["parameters"]
+        root_parameters = parameters["root_bridges"]
         self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
-        self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"], time_step, **parameters)
+        self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"]["root_mtg_file"], time_step, **root_parameters)
         self.g_root = self.root_growth.g
-        self.root_anatomy = RootAnatomy(self.g_root, time_step, **parameters)
-        self.root_water = RootWaterModel(self.g_root, time_step/10, **parameters)
-        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **parameters)
-        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **parameters)
-        self.soil = SoilModel(self.g_root, time_step, **parameters)
+        self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
+        self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
+        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **root_parameters)
+        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **root_parameters)
+        self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
-        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", isolated_roots=True, cnwheat_roots=False))
+        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 
         # EXPECTED !
