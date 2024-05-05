@@ -42,16 +42,20 @@ class Model(CompositeModel):
         :param time_step: the resolution time_step of the model in seconds.
         """
         # DECLARE GLOBAL SIMULATION TIME STEP
+
         Choregrapher().add_simulation_time_step(time_step)
+        self.time = 0
+        parameters = scenario["parameters"]
+        self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
-        self.root_growth = RootGrowthModelCoupled(time_step, **scenario)
+        self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"], time_step, **parameters)
         self.g_root = self.root_growth.g
-        self.root_anatomy = RootAnatomy(self.g_root, time_step, **scenario)
-        self.root_water = RootWaterModel(self.g_root, time_step/10, **scenario)
-        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **scenario)
-        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **scenario)
-        self.soil = SoilModel(self.g_root, time_step, **scenario)
+        self.root_anatomy = RootAnatomy(self.g_root, time_step, **parameters)
+        self.root_water = RootWaterModel(self.g_root, time_step/10, **parameters)
+        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **parameters)
+        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **parameters)
+        self.soil = SoilModel(self.g_root, time_step, **parameters)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", isolated_roots=True, cnwheat_roots=False))
         self.g_shoot = self.shoot.g
@@ -63,9 +67,12 @@ class Model(CompositeModel):
         # LINKING MODULES
         self.link_around_mtg(translator_path=wheat_bridges.__path__[0])
 
+        # Specific here TODO remove later
         self.root_water.post_coupling_init()
 
     def run(self):
+        self.apply_input_tables(tables=self.input_tables, to=self.models, when=self.time)
+
         # Update environment boundary conditions
         self.soil()
 
@@ -89,3 +96,5 @@ class Model(CompositeModel):
         self.root_water()
         self.root_carbon()
         self.root_nitrogen()
+
+        self.time += 1

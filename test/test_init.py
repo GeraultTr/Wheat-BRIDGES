@@ -1,6 +1,6 @@
-from wheat_bridges.root_bridges import Model
+from wheat_bridges.wheat_bridges import Model
 
 def test_init():
-    modef = Model(time_step=3600)
+    model = Model(time_step=3600)
 
 test_init()
