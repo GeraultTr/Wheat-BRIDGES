@@ -58,7 +58,7 @@ class Model(CompositeModel):
         self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **root_parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
-        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
+        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 
         # EXPECTED !

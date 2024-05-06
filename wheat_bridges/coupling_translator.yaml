@@ -133,9 +133,9 @@ RootNitrogenModelCoupled:
       C_mineralN_soil: 1.0
   WheatFSPM:
     AA_root_shoot_phloem:
-      Unloading_Amino_Acids: 0.000001 / (3600 * 1.4)
+      Unloading_Amino_Acids: 0.000001 / 1.4
     cytokinins_root_shoot_xylem:
-      Export_cytokinins: 1.0 / 3600
+      Export_cytokinins: 1.0
 RootWaterModel:
   RootAnatomy:
     apoplasmic_exchange_surface:
@@ -208,9 +208,9 @@ WheatFSPM:
   RootGrowthModelCoupled: {}
   RootNitrogenModelCoupled:
     Export_Amino_Acids:
-      AA_root_shoot_xylem: 1.4 * 3600 * 1000000
+      AA_root_shoot_xylem: 1.4 * 1000000
     Export_Nitrates:
-      Nm_root_shoot_xylem: 3600 * 1000000
+      Nm_root_shoot_xylem: 1000000
     cytokinins:
       total_cytokinins: 1.0
   RootWaterModel: {}

@@ -13,21 +13,22 @@ def single_run(scenario, outputs_dirpath="outputs"):
     
     logger = Logger(model_instance=whole_plant, outputs_dirpath=outputs_dirpath, 
                     time_step_in_hours=1,
-                    logging_period_in_hours=24,
+                    logging_period_in_hours=6,
                     recording_images=True, plotted_property="C_hexose_root", show_soil=True,
                     recording_mtg=False,
                     recording_raw=False,
                     recording_sums=True,
+                    recording_shoot=True,
                     recording_performance=True,
                     echo=True)
 
     try:
-        for _ in range(200):
+        for _ in range(100):
             # Placed here also to capture mtg initialization
             logger()
             whole_plant.run()
 
-    except (ZeroDivisionError, ):
+    except (ZeroDivisionError, KeyboardInterrupt):
         logger.exceptions.append(sys.exc_info())
 
     finally:
@@ -36,6 +37,7 @@ def single_run(scenario, outputs_dirpath="outputs"):
                      on_sums=True,
                      on_performance=True,
                      animate_raw_logs=False,
+                     on_shoot_logs=True,
                      target_properties=[]
                      )
 
