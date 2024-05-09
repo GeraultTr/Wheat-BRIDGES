@@ -12,6 +12,7 @@ from root_cynaps.root_water import RootWaterModel
 
 # Shoot Model
 from fspmwheat.simulation import WheatFSPM, scenario_utility
+import wheat_bridges.cn_wheat_collar
 
 # Utilities
 from metafspm.composite_wrapper import CompositeModel
@@ -53,9 +54,9 @@ class Model(CompositeModel):
         self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"]["root_mtg_file"], time_step, **root_parameters)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
-        self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
+        self.root_water = RootWaterModel(self.g_root, time_step/5, **root_parameters)
         self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **root_parameters)
-        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step, **root_parameters)
+        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step/2, **root_parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))

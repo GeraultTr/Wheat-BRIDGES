@@ -23,7 +23,7 @@ def single_run(scenario, outputs_dirpath="outputs"):
                     echo=True)
 
     try:
-        for _ in range(100):
+        for _ in range(1001):
             # Placed here also to capture mtg initialization
             logger()
             whole_plant.run()
