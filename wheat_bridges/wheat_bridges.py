@@ -12,7 +12,7 @@ from root_cynaps.root_water import RootWaterModel
 
 # Shoot Model
 from fspmwheat.simulation import WheatFSPM, scenario_utility
-#import wheat_bridges.cn_wheat_collar
+import wheat_bridges.cn_wheat_collar
 
 # Utilities
 from metafspm.composite_wrapper import CompositeModel
