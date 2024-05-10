@@ -1,5 +1,6 @@
 # Public packages
 import os, sys
+import multiprocessing as mp
 # Model packages
 from wheat_bridges.wheat_bridges import Model
 # Utility packages
@@ -23,10 +24,11 @@ def single_run(scenario, outputs_dirpath="outputs"):
                     echo=True)
 
     try:
-        for _ in range(1001):
+        for _ in range(200):
             # Placed here also to capture mtg initialization
             logger()
-            whole_plant.run()
+            logger.run_model_step()
+            #whole_plant.run()
 
     except (ZeroDivisionError, KeyboardInterrupt):
         logger.exceptions.append(sys.exc_info())
@@ -43,9 +45,17 @@ def single_run(scenario, outputs_dirpath="outputs"):
 
 
 def test_apply_scenarios():
-    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB1"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB2", "WB3"])
+    processes = []
     for scenario_name, scenario in scenarios.items():
-        single_run(scenario=scenario, outputs_dirpath=os.path.join("outputs", str(scenario_name)))
+        print(f"[INFO] Launching scenario {scenario_name}...")
+        p = mp.Process(target=single_run, kwargs=dict(scenario=scenario, outputs_dirpath=os.path.join("outputs", str(scenario_name))))
+        p.start()
+        processes.append(p)
+
+    for p in processes:
+        p.join()
 
 
-test_apply_scenarios()
+if __name__ == '__main__':
+    test_apply_scenarios()
