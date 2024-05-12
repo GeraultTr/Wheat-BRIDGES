@@ -34,14 +34,18 @@ class Collar:
         """
         conc_sucrose_phloem_roots = sucrose_roots / (self.mstruct * self.__class__.PARAMETERS.ALPHA)
         conc_sucrose_phloem_shoot = sucrose_phloem / ((mstruct_axis - self.mstruct) * parameters.AXIS_PARAMETERS.ALPHA)
-        #: Driving compartment (µmol` C g-1 mstruct)
-        driving_sucrose_compartment = max(conc_sucrose_phloem_shoot, conc_sucrose_phloem_roots)
-        #: Gradient of sucrose between the roots and the phloem (µmol` C g-1 mstruct)
-        diff_sucrose = conc_sucrose_phloem_shoot - conc_sucrose_phloem_roots
-        #: Conductance depending on mstruct (g2 µmol`-1 s-1)
-        conductance = parameters.ROOTS_PARAMETERS.SIGMA_SUCROSE * parameters.ROOTS_PARAMETERS.BETA * self.mstruct ** (2 / 3) * T_effect_conductivity
+        # This initialization situation is accounted for to avoid unlogical depleating when one of the models is initialized too low
+        if conc_sucrose_phloem_shoot == 0. or conc_sucrose_phloem_roots == 0.:
+            return 0.
+        else:
+            #: Driving compartment (µmol` C g-1 mstruct)
+            driving_sucrose_compartment = max(conc_sucrose_phloem_shoot, conc_sucrose_phloem_roots)
+            #: Gradient of sucrose between the roots and the phloem (µmol` C g-1 mstruct)
+            diff_sucrose = conc_sucrose_phloem_shoot - conc_sucrose_phloem_roots
+            #: Conductance depending on mstruct (g2 µmol`-1 s-1)
+            conductance = parameters.ROOTS_PARAMETERS.SIGMA_SUCROSE * parameters.ROOTS_PARAMETERS.BETA * self.mstruct ** (2 / 3) * T_effect_conductivity
 
-        return driving_sucrose_compartment * diff_sucrose * conductance * parameters.SECOND_TO_HOUR_RATE_CONVERSION
+            return driving_sucrose_compartment * diff_sucrose * conductance * parameters.SECOND_TO_HOUR_RATE_CONVERSION
 
 
 model.Roots.calculate_Unloading_Sucrose = Collar.calculate_Unloading_Sucrose
