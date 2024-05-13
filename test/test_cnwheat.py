@@ -20,7 +20,7 @@ def single_run(scenario, outputs_dirpath="outputs"):
                     recording_raw=False,
                     recording_sums=True,
                     recording_shoot=True,
-                    recording_performance=False,
+                    recording_performance=True,
                     echo=True)
 
     try:
@@ -37,15 +37,15 @@ def single_run(scenario, outputs_dirpath="outputs"):
         logger.stop()
         analyze_data(outputs_dirpath=outputs_dirpath,
                      on_sums=True,
-                     on_performance=False,
+                     on_performance=True,
                      animate_raw_logs=False,
                      on_shoot_logs=True,
-                     target_properties=[]
+                     target_properties=None
                      )
 
 
 def test_apply_scenarios():
-    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB1", "WB2", "WB3"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB1"])
     processes = []
     for scenario_name, scenario in scenarios.items():
         print(f"[INFO] Launching scenario {scenario_name}...")
@@ -60,4 +60,4 @@ def test_apply_scenarios():
 if __name__ == '__main__':
     test_apply_scenarios()
     # In the end put the system to sleep, windows only
-    os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+    #os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")

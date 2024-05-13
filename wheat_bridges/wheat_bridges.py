@@ -83,7 +83,7 @@ class Model(CompositeModel):
 
         # Compute root growth from resulting states
         self.root_growth()
-        
+
         # Extend property dictionaries after growth
         self.root_anatomy.post_growth_updating()
         self.root_water.post_growth_updating()
