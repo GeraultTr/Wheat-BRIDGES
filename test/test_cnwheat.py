@@ -45,7 +45,7 @@ def single_run(scenario, outputs_dirpath="outputs"):
 
 
 def test_apply_scenarios():
-    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB1"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB2", "WB3"])
     processes = []
     for scenario_name, scenario in scenarios.items():
         print(f"[INFO] Launching scenario {scenario_name}...")
