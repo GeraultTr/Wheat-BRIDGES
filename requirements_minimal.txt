@@ -1,18 +1,21 @@
 # use : mamba create -y -n wheat-bridges -c openalea3 -c conda-forge --strict-channel-priority --file requirements.txt
+# IF ON WINDOWS, PERFORM THE FOLLOWING
+# in the requirements_minimal, uncomment "openalea.sconsx", "m2w64-toolchain" and comment "alinea.caribu", as you will need to install caribu manually with the following steps.
 # then clone https://github.com/openalea-incubator/caribu.git
 # cd to folder and run "scons" to build it
 # then run python -m setup.py install
 # finally proceed to other installations
+
 python
 # OpenAlea dependancies
 # openalea.plantgl dependancy of openalea.mtg
 openalea.mtg
 openalea.deploy
 openalea.lpy
-# alinea.caribu
+alinea.caribu
 alinea.astk
-openalea.sconsx 
-m2w64-toolchain
+# openalea.sconsx
+# m2w64-toolchain
 
 # packaged dependancies
 xarray
