@@ -2,7 +2,7 @@ from cnwheat import model, parameters
 
 
 class Collar:
-    def calculate_Unloading_Sucrose(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
+    def calculate_Unloading_Sucrose_homogeneous(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
         """Rate of sucrose Unloading from phloem to roots (µmol` C sucrose unloaded g-1 mstruct h-1).
 
 
@@ -20,7 +20,7 @@ class Collar:
         return max((conc_sucrose_whole_phloem * self.mstruct) - sucrose_roots, 0.)
 
 
-    def calculate_Unloading_Sucrose_old(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
+    def calculate_Unloading_Sucrose(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
         """Rate of sucrose Unloading from phloem to roots (µmol` C sucrose unloaded g-1 mstruct h-1).
 
         :param float sucrose_roots: Amount of sucrose in roots (µmol` C)
