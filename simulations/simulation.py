@@ -14,7 +14,7 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
     
     logger = Logger(model_instance=whole_plant, outputs_dirpath=outputs_dirpath, 
                     time_step_in_hours=1, logging_period_in_hours=24,
-                    echo=echo, auto_camera_position=True, **log_settings)
+                    echo=echo, auto_camera_position=True, static_mtg=False, **log_settings)
 
     try:
         for _ in range(simulation_length):
