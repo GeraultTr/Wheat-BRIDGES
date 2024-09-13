@@ -31,8 +31,7 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
         analyze_data(scenarios=[os.path.basename(outputs_dirpath)], outputs_dirpath="outputs", target_properties=None, **log_settings)
 
 
-def test_apply_scenarios(simulation_length=24, echo=True, log_settings=Logger.light_log):
-    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB1", "WB2", "WB3"])
+def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings=Logger.light_log):
     processes = []
     max_processes = mp.cpu_count()
     for scenario_name, scenario in scenarios.items():
@@ -54,6 +53,5 @@ def test_apply_scenarios(simulation_length=24, echo=True, log_settings=Logger.li
 
 
 if __name__ == '__main__':
-    test_apply_scenarios()
-    # In the end put the system to sleep, windows only
-    #os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+    scenarios = ms.from_table(file_path="inputs/Scenarios.xlsx", which=["WB1", "WB2", "WB3"])
+    simulate_scenarios()

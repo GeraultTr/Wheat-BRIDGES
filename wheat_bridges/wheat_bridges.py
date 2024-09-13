@@ -51,19 +51,21 @@ class Model(CompositeModel):
         self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
-        self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"]["root_mtg_file"], time_step, **root_parameters)
+        if len(scenario["input_mtg"]) > 0:
+            self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"]["root_mtg_file"], time_step, **parameters)
+        else:
+            self.root_growth = RootGrowthModelCoupled(time_step, **parameters)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
-        self.root_water = RootWaterModel(self.g_root, time_step/5, **root_parameters)
-        self.root_carbon = RootCarbonModelCoupled(self.g_root, time_step/4, **root_parameters)
-        self.root_nitrogen = RootNitrogenModelCoupled(self.g_root, time_step/2, **root_parameters)
+        self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
+        self.root_cn = RootCNUnified(self.g, time_step, **parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 
         # EXPECTED !
-        self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_carbon, self.root_nitrogen, self.soil, self.shoot)
+        self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot)
         self.data_structures = {"root": self.g_root, "shoot": self.g_shoot, "soil": self.soil_voxels}
 
         # LINKING MODULES
@@ -87,8 +89,7 @@ class Model(CompositeModel):
         # Extend property dictionaries after growth
         self.root_anatomy.post_growth_updating()
         self.root_water.post_growth_updating()
-        self.root_carbon.post_growth_updating()
-        self.root_nitrogen.post_growth_updating()
+        self.root_cn.post_growth_updating()
         self.soil.post_growth_updating()
 
         # Update topological surfaces and volumes based on other evolved structural properties
@@ -96,8 +97,7 @@ class Model(CompositeModel):
 
         # Compute rate -> state variations for water and then carbon and nitrogen
         self.root_water()
-        self.root_carbon()
-        self.root_nitrogen()
+        self.root_cn()
 
         self.time += 1
 
