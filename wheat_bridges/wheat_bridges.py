@@ -1,8 +1,7 @@
 import wheat_bridges
 
 # Edited models
-from root_bridges.root_carbon import RootCarbonModelCoupled
-from root_bridges.root_nitrogen import RootNitrogenModelCoupled
+from root_bridges.root_CN import RootCNUnified
 from root_bridges.root_growth import RootGrowthModelCoupled
 from root_bridges.soil_model import SoilModel
 
@@ -58,7 +57,7 @@ class Model(CompositeModel):
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
-        self.root_cn = RootCNUnified(self.g, time_step, **parameters)
+        self.root_cn = RootCNUnified(self.g_root, time_step, **parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
