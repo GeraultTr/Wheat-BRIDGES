@@ -94,7 +94,7 @@ class Model(CompositeModel):
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
 
-        # Compute rate -> state variations for water and then carbon and nitrogen
+        # Compute state variations for water and then carbon and nitrogen
         self.root_water()
         self.root_cn()
 

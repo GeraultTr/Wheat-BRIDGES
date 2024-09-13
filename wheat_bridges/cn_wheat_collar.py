@@ -46,7 +46,7 @@ class Collar:
             #: Conductance depending on mstruct (g2 µmol`-1 s-1)
             conductance = parameters.ROOTS_PARAMETERS.SIGMA_SUCROSE * parameters.ROOTS_PARAMETERS.BETA * self.mstruct ** (2 / 3) * T_effect_conductivity
             flow_value = driving_sucrose_compartment * diff_sucrose * conductance * parameters.SECOND_TO_HOUR_RATE_CONVERSION
-            print(sucrose_phloem, sucrose_roots, flow_value/(self.mstruct + mstruct_axis))
+            #print(sucrose_phloem, sucrose_roots, flow_value/(self.mstruct + mstruct_axis))
             return flow_value
 
 
