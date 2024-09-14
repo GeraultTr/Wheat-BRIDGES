@@ -11,13 +11,23 @@ class Collar:
         :param float mstruct_axis: The structural dry mass of the axis (g)
         :param float T_effect_conductivity: Effect of the temperature on the conductivity rate at 20µC (AU)
 
-        :return: Rate of Sucrose Unloading from shoot homogeneous phloem to root homogeneous phloem (µmol` C g-1 mstruct h-1)
+        :return: Rate of Sucrose Unloading from shoot homogeneous phloem to root homogeneous phloem (µmol` C g-1. h-1)
         :rtype: float
         """
-        # We compute the flow necessary to mean the concentrations between shoot and root phloem, as they are considered as homogeneous.
-        conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (self.mstruct + mstruct_axis)
 
-        return max((conc_sucrose_whole_phloem * self.mstruct) - sucrose_roots, 0.)
+        # We compute the flow necessary to mean the concentrations between shoot and root phloem, as they are considered as homogeneous.
+        #conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (self.mstruct + mstruct_axis)
+        conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (mstruct_axis)
+
+        flow_value = (conc_sucrose_whole_phloem * self.mstruct) - sucrose_roots
+        pool_proportion = 0.95
+        #print(conc_sucrose_whole_phloem * self.mstruct, sucrose_roots,  flow_value)
+
+        print(conc_sucrose_whole_phloem/1e6/12, sucrose_roots/self.mstruct/1e6/12)
+        if (flow_value > 0 and flow_value > sucrose_phloem * pool_proportion) or (flow_value < 0 and -flow_value > sucrose_roots * pool_proportion):
+            return 0.
+        else:
+            return flow_value + 1e4
 
 
     def calculate_Unloading_Sucrose(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
@@ -28,7 +38,7 @@ class Collar:
         :param float mstruct_axis: The structural dry mass of the axis (g)
         :param float T_effect_conductivity: Effect of the temperature on the conductivity rate at 20µC (AU)
 
-        :return: Rate of Sucrose Unloading (µmol` C g-1 mstruct h-1)
+        :return: Rate of Sucrose Unloading (µmol` C.h-1)
         :rtype: float
         """
 
@@ -36,18 +46,15 @@ class Collar:
         conc_sucrose_phloem_shoot = sucrose_phloem / (mstruct_axis * parameters.AXIS_PARAMETERS.ALPHA)
         # This initialization situation is accounted for to avoid unlogical depleating when one of the models is initialized too low
 
-        if conc_sucrose_phloem_shoot == 0. or conc_sucrose_phloem_roots > conc_sucrose_phloem_shoot:
-            return 0.
-        else:
-            #: Driving compartment (µmol` C g-1 mstruct)
-            driving_sucrose_compartment = max(conc_sucrose_phloem_shoot, conc_sucrose_phloem_roots)
-            #: Gradient of sucrose between the roots and the phloem (µmol` C g-1 mstruct)
-            diff_sucrose = conc_sucrose_phloem_shoot - conc_sucrose_phloem_roots
-            #: Conductance depending on mstruct (g2 µmol`-1 s-1)
-            conductance = parameters.ROOTS_PARAMETERS.SIGMA_SUCROSE * parameters.ROOTS_PARAMETERS.BETA * self.mstruct ** (2 / 3) * T_effect_conductivity
-            flow_value = driving_sucrose_compartment * diff_sucrose * conductance * parameters.SECOND_TO_HOUR_RATE_CONVERSION
-            #print(sucrose_phloem, sucrose_roots, flow_value/(self.mstruct + mstruct_axis))
-            return flow_value
+        #: Driving compartment (µmol` C g-1 mstruct)
+        driving_sucrose_compartment = max(conc_sucrose_phloem_shoot, conc_sucrose_phloem_roots)
+        #: Gradient of sucrose between the roots and the phloem (µmol` C g-1 mstruct)
+        diff_sucrose = conc_sucrose_phloem_shoot - conc_sucrose_phloem_roots
+        #: Conductance depending on mstruct (g2 µmol`-1 s-1)
+        conductance = parameters.ROOTS_PARAMETERS.SIGMA_SUCROSE * parameters.ROOTS_PARAMETERS.BETA * self.mstruct ** (2 / 3) * T_effect_conductivity
+        flow_value = driving_sucrose_compartment * diff_sucrose * conductance * parameters.SECOND_TO_HOUR_RATE_CONVERSION
+
+        return max(30, flow_value)
 
 
 model.Roots.calculate_Unloading_Sucrose = Collar.calculate_Unloading_Sucrose

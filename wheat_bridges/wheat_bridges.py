@@ -46,7 +46,7 @@ class Model(CompositeModel):
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
         parameters = scenario["parameters"]
-        root_parameters = parameters["root_bridges"]
+        root_parameters = parameters["root_bridges"]["roots"]
         self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
@@ -57,7 +57,7 @@ class Model(CompositeModel):
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
-        self.root_cn = RootCNUnified(self.g_root, time_step, **parameters)
+        self.root_cn = RootCNUnified(self.g_root, time_step, **root_parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
@@ -72,6 +72,7 @@ class Model(CompositeModel):
 
         # Specific here TODO remove later
         self.root_water.post_coupling_init()
+
 
     def run(self):
         self.apply_input_tables(tables=self.input_tables, to=self.models, when=self.time)
