@@ -12,7 +12,8 @@ from analyze.analyze import analyze_data
 def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo=True, log_settings={}):
     whole_plant = Model(time_step=3600, **scenario)
     
-    logger = Logger(model_instance=whole_plant, outputs_dirpath=outputs_dirpath, 
+    logger = Logger(model_instance=whole_plant, components=whole_plant.components,
+                    outputs_dirpath=outputs_dirpath,
                     time_step_in_hours=1, logging_period_in_hours=6,
                     echo=echo, auto_camera_position=True, static_mtg=False, **log_settings)
 
@@ -53,5 +54,5 @@ def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings=
 
 
 if __name__ == '__main__':
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-09-13.xlsx", which=["WB4", "WB5"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_24-09-13.xlsx", which=["WB6"])
     simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.medium_log_focus_images)

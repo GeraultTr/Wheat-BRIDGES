@@ -63,7 +63,7 @@ class Collar:
 
         #print(conc_sucrose_phloem_shoot, conc_sucrose_phloem_roots, flow_value)
 
-        return max(- 0.3 * sucrose_roots, flow_value)
+        return min(max(- 0.3 * sucrose_roots, flow_value), 0.95*sucrose_phloem)
 
 
 model.Roots.calculate_Unloading_Sucrose = Collar.calculate_Unloading_Sucrose

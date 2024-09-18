@@ -41,8 +41,7 @@ class Model(CompositeModel):
         :param g: the openalea.MTG() instance that will be worked on. It must be representative of a root architecture.
         :param time_step: the resolution time_step of the model in seconds.
         """
-        # DECLARE GLOBAL SIMULATION TIME STEP
-
+        # DECLARE GLOBAL SIMULATION TIME STEP, FOR THE CHOREGRAPHER TO KNOW IF IT HAS TO SUBDIVIDE TIME-STEPS
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
         parameters = scenario["parameters"]
@@ -63,19 +62,18 @@ class Model(CompositeModel):
         self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 
-        # EXPECTED !
-        self.models = (self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot)
-        self.data_structures = {"root": self.g_root, "shoot": self.g_shoot, "soil": self.soil_voxels}
-
         # LINKING MODULES
-        self.link_around_mtg(translator_path=wheat_bridges.__path__[0])
+        self.declare_and_couple_components(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot,
+                                           translator_path=wheat_bridges.__path__[0])
+
+        self.declare_data_structures(root=self.g_root, shoot=self.g_shoot, soil=self.soil_voxels)
 
         # Specific here TODO remove later
         self.root_water.post_coupling_init()
 
 
     def run(self):
-        self.apply_input_tables(tables=self.input_tables, to=self.models, when=self.time)
+        self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
 
         # Update environment boundary conditions
         self.soil()
