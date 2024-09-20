@@ -2,42 +2,6 @@ from cnwheat import model, parameters
 
 
 class Collar:
-    def calculate_Unloading_Sucrose_tests(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
-        """Rate of sucrose Unloading from phloem to roots (µmol` C sucrose unloaded g-1 mstruct h-1).
-
-
-        :param float sucrose_roots: Amount of sucrose in roots (µmol` C)
-        :param float sucrose_phloem: Sucrose concentration in phloem (µmol` C g-1 mstruct)
-        :param float mstruct_axis: The structural dry mass of the axis (g)
-        :param float T_effect_conductivity: Effect of the temperature on the conductivity rate at 20µC (AU)
-
-        :return: Rate of Sucrose Unloading from shoot homogeneous phloem to root homogeneous phloem (µmol` C g-1. h-1)
-        :rtype: float
-        """
-
-        # We compute the flow necessary to mean the concentrations between shoot and root phloem, as they are considered as homogeneous.
-        #conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (self.mstruct + mstruct_axis)
-
-        if sucrose_roots < 0:
-            return -sucrose_roots
-        elif sucrose_phloem < 0:
-            return 0.
-        else:
-            conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / mstruct_axis
-            if conc_sucrose_whole_phloem > 1000:
-                return 0.
-            else:
-                target_root_phloem_content = conc_sucrose_whole_phloem * self.mstruct
-
-                vmax = 500
-                km = 1e4
-                #flow_value = conc_sucrose_whole_phloem * vmax / (km + conc_sucrose_whole_phloem)
-                #flow_value = min(target_root_phloem_content - sucrose_roots, 0.95 * (sucrose_roots + sucrose_phloem))
-                flow_value = (sucrose_phloem) * (self.mstruct / (mstruct_axis - self.mstruct))
-                print(flow_value, conc_sucrose_whole_phloem, (self.mstruct / (mstruct_axis - self.mstruct)))
-
-                return max(0, flow_value)
-
     def calculate_Unloading_Sucrose(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
         """Rate of sucrose Unloading from phloem to roots (µmol` C sucrose unloaded g-1 mstruct h-1).
 
