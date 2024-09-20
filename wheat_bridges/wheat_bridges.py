@@ -18,7 +18,7 @@ from metafspm.composite_wrapper import CompositeModel
 from metafspm.component_factory import Choregrapher
 
 
-class Model(CompositeModel):
+class WheatBRIDGES(CompositeModel):
     """
     Root-BRIDGES model
 
@@ -32,7 +32,7 @@ class Model(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, time_step: int, **scenario):
+    def __init__(self, name="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], **scenario):
         """
         DESCRIPTION
         ----------
@@ -42,17 +42,19 @@ class Model(CompositeModel):
         :param time_step: the resolution time_step of the model in seconds.
         """
         # DECLARE GLOBAL SIMULATION TIME STEP, FOR THE CHOREGRAPHER TO KNOW IF IT HAS TO SUBDIVIDE TIME-STEPS
+        self.name = name
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
+
         parameters = scenario["parameters"]
         root_parameters = parameters["root_bridges"]["roots"]
         self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
         if len(scenario["input_mtg"]) > 0:
-            self.root_growth = RootGrowthModelCoupled(scenario["input_mtg"]["root_mtg_file"], time_step, **parameters)
+            self.root_growth = RootGrowthModelCoupled(g=scenario["input_mtg"]["root_mtg_file"], time_step=time_step, **parameters)
         else:
-            self.root_growth = RootGrowthModelCoupled(time_step, **parameters)
+            self.root_growth = RootGrowthModelCoupled(g=None, time_step=time_step, **parameters)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)

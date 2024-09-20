@@ -2,7 +2,7 @@
 import os, sys
 import multiprocessing as mp
 # Model packages
-from wheat_bridges.wheat_bridges import Model
+from wheat_bridges.wheat_bridges import WheatBRIDGES
 # Utility packages
 from log.logging import Logger
 from initialize.initialize import MakeScenarios as ms
@@ -10,7 +10,7 @@ from analyze.analyze import analyze_data
 
 
 def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo=True, log_settings={}):
-    whole_plant = Model(time_step=3600, **scenario)
+    whole_plant = WheatBRIDGES(time_step=3600, **scenario)
     
     logger = Logger(model_instance=whole_plant, components=whole_plant.components,
                     outputs_dirpath=outputs_dirpath,
