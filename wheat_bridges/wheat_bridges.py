@@ -69,7 +69,7 @@ class WheatBRIDGES(CompositeModel):
                                            translator_path=wheat_bridges.__path__[0])
 
         self.declare_data_structures(root=self.g_root, shoot=self.g_shoot, soil=self.soil_voxels)
-
+        
         # Specific here TODO remove later
         self.root_water.post_coupling_init()
 
