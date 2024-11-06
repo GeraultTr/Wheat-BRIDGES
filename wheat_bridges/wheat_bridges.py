@@ -76,7 +76,7 @@ class WheatBRIDGES(CompositeModel):
 
     def run(self):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
-
+        
         # Update environment boundary conditions
         self.soil()
 
@@ -85,7 +85,7 @@ class WheatBRIDGES(CompositeModel):
 
         # Compute root growth from resulting states
         self.root_growth()
-
+        
         # Extend property dictionaries after growth
         self.root_anatomy.post_growth_updating()
         self.root_water.post_growth_updating()
