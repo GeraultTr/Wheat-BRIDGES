@@ -18,6 +18,7 @@ alinea.astk
 # m2w64-toolchain
 
 # packaged dependancies
+trimesh
 xarray
 netcdf4
 dask
@@ -33,7 +34,11 @@ matplotlib
 imageio
 imageio-ffmpeg
 pyvista
+# also requires libgl1-mesa-glx and xvfb if on linux
 openpyxl
 #cudatoolkit
 #tensorflow
 statsmodels
+gudhi
+SALib
+pint

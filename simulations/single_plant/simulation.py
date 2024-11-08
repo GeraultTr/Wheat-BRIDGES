@@ -55,5 +55,5 @@ def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings=
 
 
 if __name__ == '__main__':
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_Reference"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WBR1"])
     simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.heavy_log)
