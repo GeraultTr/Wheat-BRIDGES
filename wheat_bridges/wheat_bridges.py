@@ -78,7 +78,7 @@ class WheatBRIDGES(CompositeModel):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
         
         # Update environment boundary conditions
-        self.soil()
+        #self.soil()
 
         # Compute shoot flows and state balance for CN-wheat
         self.shoot()
@@ -91,6 +91,8 @@ class WheatBRIDGES(CompositeModel):
         self.root_water.post_growth_updating()
         self.root_cn.post_growth_updating()
         self.soil.post_growth_updating()
+        self.soil.compute_mtg_voxel_neighbors()
+        self.soil.get_from_voxel()
 
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()

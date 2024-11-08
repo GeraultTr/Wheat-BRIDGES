@@ -6,7 +6,7 @@ from wheat_bridges.wheat_bridges import WheatBRIDGES
 # Utility packages
 from log.logging import Logger
 from initialize.initialize import MakeScenarios as ms
-from analyze.analyze import analyze_data
+from analyze.analyze import analyze_data, test_output_range
 
 
 def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo=True, log_settings={}):
@@ -30,6 +30,7 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
     finally:
         logger.stop()
         analyze_data(scenarios=[os.path.basename(outputs_dirpath)], outputs_dirpath="outputs", target_properties=None, **log_settings)
+        test_output_range(outputs_dirpath=outputs_dirpath, scenarios=[scenario], test_file_dirpath="inputs")
 
 
 def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings={}):

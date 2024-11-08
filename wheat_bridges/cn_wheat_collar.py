@@ -29,5 +29,15 @@ class Collar:
 
         return min(max(- 0.3 * sucrose_roots, flow_value), 0.95*sucrose_phloem)
 
+    def calculate_Unloading_Sucrose_homogeneous(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
+        """
+        Rate of sucrose Unloading from phloem to roots (µmol` C sucrose unloaded g-1 mstruct h-1).
+        We compute the flow necessary to mean the concentrations between shoot and root phloem, as they are considered as homogeneous.
+        """
+        #conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (self.mstruct + mstruct_axis)
+        conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (mstruct_axis)
 
-model.Roots.calculate_Unloading_Sucrose = Collar.calculate_Unloading_Sucrose
+        return (conc_sucrose_whole_phloem * self.mstruct) - sucrose_roots
+    
+
+model.Roots.calculate_Unloading_Sucrose = Collar.calculate_Unloading_Sucrose_homogeneous
