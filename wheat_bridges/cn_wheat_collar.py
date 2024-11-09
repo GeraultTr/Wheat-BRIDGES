@@ -32,12 +32,20 @@ class Collar:
     def calculate_Unloading_Sucrose_homogeneous(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
         """
         Rate of sucrose Unloading from phloem to roots (µmol` C sucrose unloaded g-1 mstruct h-1).
-        We compute the flow necessary to mean the concentrations between shoot and root phloem, as they are considered as homogeneous.
+        We compute the flow necessary to mean the concentrations between shoot and root phloem, as they are considered as homogeneous for young cereals.
         """
         #conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (self.mstruct + mstruct_axis)
         conc_sucrose_whole_phloem = (sucrose_roots + sucrose_phloem) / (mstruct_axis)
-
-        return (conc_sucrose_whole_phloem * self.mstruct) - sucrose_roots
+        flow_value = (conc_sucrose_whole_phloem * self.mstruct) - sucrose_roots
+        # if flow_value > 0.25*sucrose_phloem:
+        #     print("low warning")
+        #     if flow_value > 0.5*sucrose_phloem:
+        #         print("first warning")
+        #         if flow_value > 0.75*sucrose_phloem:
+        #             print("second warning")
+        #             if flow_value > 0.95*sucrose_phloem:
+        #                 print("flow is too high compared to shoot content!")
+        return flow_value
     
 
 model.Roots.calculate_Unloading_Sucrose = Collar.calculate_Unloading_Sucrose_homogeneous

@@ -15,7 +15,7 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
     logger = Logger(model_instance=whole_plant, components=whole_plant.components,
                     outputs_dirpath=outputs_dirpath,
                     time_step_in_hours=1, logging_period_in_hours=6,
-                    echo=echo, auto_camera_position=True, **log_settings)
+                    echo=echo, **log_settings)
 
     try:
         for _ in range(simulation_length):
@@ -55,5 +55,6 @@ def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings=
 
 
 if __name__ == '__main__':
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WBR1"])
+    #scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WBR1", "WBR2", "WBR3"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_S1"])
     simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.heavy_log)
