@@ -5,7 +5,6 @@ cd ..
 cd rhizodep
 git pull origin main
 cd ..
-cd ..
 git pull origin main
 cd ..
 git pull origin main

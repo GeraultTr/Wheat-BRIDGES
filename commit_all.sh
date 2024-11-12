@@ -9,7 +9,6 @@ git add .
 git commit -m "automatic commit"
 git push origin main
 cd ..
-cd ..
 git add .
 git commit -m "automatic commit"
 git push origin main
