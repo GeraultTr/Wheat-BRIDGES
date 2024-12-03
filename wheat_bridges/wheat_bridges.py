@@ -61,14 +61,13 @@ class WheatBRIDGES(CompositeModel):
         self.root_cn = RootCNUnified(self.g_root, time_step/3, **root_parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
-        self.shoot = WheatFSPM(**scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
+        self.shoot = WheatFSPM(root_mtg=self.g_root, **scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 
         # LINKING MODULES
-        self.declare_and_couple_components(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot,
-                                           translator_path=wheat_bridges.__path__[0])
-
-        self.declare_data_structures(root=self.g_root, shoot=self.g_shoot, soil=self.soil_voxels)
+        self.declare_data_and_couple_components(root=self.g_root, shoot=self.g_shoot, soil=self.soil_voxels,
+                                                translator_path=wheat_bridges.__path__[0],
+                                                components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot))
         
         # Specific here TODO remove later
         self.root_water.post_coupling_init()
