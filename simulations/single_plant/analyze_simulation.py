@@ -5,7 +5,7 @@ from analyze.analyze import analyze_data
 
 if __name__ == '__main__':
 
-    scenarios = ["WB_R17_patch"]
+    scenarios = ["WB_R24"]
 
     #output_path = "outputs"
     #output_path = "C:/Users/tigerault/OneDrive - agroparistech.fr/Thesis/Sujet/Modelling/saved_scenarios/05-06_hairless_tests"
@@ -20,5 +20,5 @@ if __name__ == '__main__':
                      )
     
     # In the end put the system to sleep, Windows only
-    #os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+    # os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
     

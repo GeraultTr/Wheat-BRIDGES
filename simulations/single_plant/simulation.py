@@ -14,7 +14,7 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
     
     logger = Logger(model_instance=whole_plant, components=whole_plant.components,
                     outputs_dirpath=outputs_dirpath,
-                    time_step_in_hours=1, logging_period_in_hours=48,
+                    time_step_in_hours=1, logging_period_in_hours=24,
                     recording_shoot=True,
                     echo=echo, **log_settings)
 
