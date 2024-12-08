@@ -17,13 +17,18 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
                     time_step_in_hours=1, logging_period_in_hours=24,
                     recording_shoot=True,
                     echo=echo, **log_settings)
-
+    stop_file = os.path.join(outputs_dirpath, "Delete_to_Stop")
+    open(stop_file, "w").close()
     try:
         for _ in range(simulation_length):
             # Placed here also to capture mtg initialization
-            logger()
+            
             logger.run_and_monitor_model_step()
-            #whole_plant.run()
+            # logger()
+            # whole_plant.run()
+
+            if not os.path.exists(stop_file):
+                raise KeyboardInterrupt
 
     except (ZeroDivisionError, KeyboardInterrupt):
         logger.exceptions.append(sys.exc_info())
@@ -56,7 +61,10 @@ def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings=
 
 
 if __name__ == '__main__':
+    # Paperclip : mamba activate wheat-bridges && cd simulations/single_plant && python -m simulation
+
     #scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R13", "WB_R14", "WB_R15", "WB_R16", "WB_R17", "WB_R18", "WB_R19"])
     # scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R21", "WB_R22", "WB_R23", "WB_R24"])
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R21"])
-    simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.heavy_log)
+    #scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_Reference", "WB_Reference_V1"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_lowS7_patch"])
+    simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.light_log)
