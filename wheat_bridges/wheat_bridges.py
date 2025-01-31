@@ -52,9 +52,9 @@ class WheatBRIDGES(CompositeModel):
 
         # INIT INDIVIDUAL MODULES
         if len(scenario["input_mtg"]) > 0:
-            self.root_growth = RootGrowthModelCoupled(g=scenario["input_mtg"]["root_mtg_file"], time_step=time_step, **parameters)
+            self.root_growth = RootGrowthModelCoupled(g=scenario["input_mtg"]["root_mtg_file"], time_step=time_step, **root_parameters)
         else:
-            self.root_growth = RootGrowthModelCoupled(g=None, time_step=time_step, **parameters)
+            self.root_growth = RootGrowthModelCoupled(g=None, time_step=time_step, **root_parameters)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
