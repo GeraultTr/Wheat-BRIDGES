@@ -10,7 +10,7 @@ from analyze.analyze import analyze_data, test_output_range
 
 
 def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo=True, log_settings={}):
-    
+
     whole_plant = WheatBRIDGES(time_step=3600, **scenario)
     
     logger = Logger(model_instance=whole_plant, components=whole_plant.components,
@@ -68,5 +68,5 @@ if __name__ == '__main__':
     #scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R13", "WB_R14", "WB_R15", "WB_R16", "WB_R17", "WB_R18", "WB_R19"])
     # scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R21", "WB_R22", "WB_R23", "WB_R24"])
     #scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_Reference", "WB_Reference_V1"])
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_lowS7_O2"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_lowS7"])
     simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.medium_log_focus_images)

@@ -147,7 +147,11 @@ RootWaterModel:
     xylem_volume:
       xylem_volume: 1.0
 
-  RootCNUnified: {}
+  RootCNUnified:
+    AA:
+      AA: 1.0
+    Nm:
+      Nm: 1.0
 
   RootGrowthModelCoupled:
     length:
