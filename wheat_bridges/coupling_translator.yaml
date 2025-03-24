@@ -32,8 +32,6 @@ RootAnatomy:
 RootCNUnified:
 
   RootAnatomy:
-    apoplasmic_exchange_surface:
-      apoplasmic_exchange_surface: 1.0
     cortex_exchange_surface:
       cortex_exchange_surface: 1.0
     endodermis_conductance_factor:
@@ -62,8 +60,8 @@ RootCNUnified:
       initial_struct_mass: 1.0
     length:
       length: 1.0
-    living_root_hairs_struct_mass:
-      living_root_hairs_struct_mass: 1.0
+    living_struct_mass:
+      living_struct_mass: 1.0
     radius:
       radius: 1.0
     struct_mass:
@@ -72,14 +70,20 @@ RootCNUnified:
       type: 1.0
     struct_mass_produced:
       struct_mass_produced: 1.0
+    root_hairs_struct_mass_produced:
+      root_hairs_struct_mass_produced: 1.0
     thermal_time_since_emergence:
       thermal_time_since_emergence: 1.0
     amino_acids_consumption_by_growth:
       amino_acids_consumption_by_growth: 1.0
     vertex_index:
       vertex_index: 1.0
-
+    total_living_struct_mass:
+      total_living_struct_mass: 1.0
+    
   RootWaterModel:
+    radial_import_water:
+      radial_import_water: 1.0
     axial_export_water_up:
       axial_export_water_up: 1.0
     axial_import_water_down:
@@ -104,6 +108,8 @@ RootCNUnified:
       microbial_C: 1.0
     Nm_fungus:
       microbial_N: 1.0
+    soil_temperature:
+      soil_temperature: 1.0
 
   WheatFSPM:
     sucrose_input_rate:
@@ -140,26 +146,30 @@ RootGrowthModelCoupled:
 RootWaterModel:
 
   RootAnatomy:
-    apoplasmic_exchange_surface:
-      apoplasmic_exchange_surface: 1.0
     cortex_exchange_surface:
       cortex_exchange_surface: 1.0
+    xylem_vessel_radii:
+      xylem_vessel_radii: 1.0
     xylem_volume:
       xylem_volume: 1.0
+    kr_symplasmic_water:
+      kr_symplasmic_water: 1.0
+    kr_apoplastic_water:
+      kr_apoplastic_water: 1.0
+    xylem_differentiation_factor:
+      xylem_differentiation_factor: 1.0
 
-  RootCNUnified:
-    AA:
-      AA: 1.0
-    Nm:
-      Nm: 1.0
+  RootCNUnified: {}
 
   RootGrowthModelCoupled:
     length:
       length: 1.0
     radius:
       radius: 1.0
-    struct_mass:
-      struct_mass: 1.0
+    living_struct_mass:
+      living_struct_mass: 1.0
+    type:
+      type: 1.0
 
   RootWaterModel: {}
 
@@ -208,6 +218,10 @@ SoilModel:
       diffusion_AA_soil_xylem: 12 * 6 # C molar mass * number of atoms 
 
   RootGrowthModelCoupled:
+    length:
+      length: 1.0
+    initial_length:
+      initial_length: 1.0
     struct_mass:
       struct_mass: 1.0
 

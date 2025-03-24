@@ -1,5 +1,5 @@
 # Public packages
-import os, sys, time
+import os, traceback, time
 import multiprocessing as mp
 # Model packages
 from wheat_bridges.wheat_bridges import WheatBRIDGES
@@ -19,7 +19,7 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
                     recording_shoot=True,
                     echo=echo, **log_settings)
     
-    stop_file = os.path.join(outputs_dirpath, "Delete_to_Stop")
+    stop_file = os.path.join(outputs_dirpath + " *", "Delete_to_Stop")
     open(stop_file, "w").close()
     try:
         for _ in range(simulation_length):
@@ -32,8 +32,8 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
             if not os.path.exists(stop_file):
                 raise KeyboardInterrupt
 
-    except (ZeroDivisionError, KeyboardInterrupt):
-        logger.exceptions.append(sys.exc_info())
+    except Exception as e:
+        logger.exceptions.append(traceback.format_exc())
 
     finally:
         logger.stop()
@@ -41,10 +41,14 @@ def single_run(scenario, outputs_dirpath="outputs", simulation_length=2500, echo
         #test_output_range(outputs_dirpath=outputs_dirpath, scenarios=[scenario], test_file_dirpath="inputs")
 
 
-def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings={}):
+def simulate_scenarios(scenarios, simulation_length=24, echo=True, custom_prefix=None, log_settings={}):
     processes = []
     max_processes = mp.cpu_count()
     for scenario_name, scenario in scenarios.items():
+
+        # Enable quick parallel testing with exact same parameters
+        if custom_prefix:
+            scenario_name = f"{scenario_name}_{custom_prefix}"
 
         while len(processes) == max_processes:
             for proc in processes:
@@ -63,7 +67,6 @@ def simulate_scenarios(scenarios, simulation_length=24, echo=True, log_settings=
 
 
 if __name__ == '__main__':
-    # Paperclip : mamba activate wheat-bridges && cd simulations/single_plant && python -m simulation
 
     #scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R13", "WB_R14", "WB_R15", "WB_R16", "WB_R17", "WB_R18", "WB_R19"])
     # scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_R21", "WB_R22", "WB_R23", "WB_R24"])

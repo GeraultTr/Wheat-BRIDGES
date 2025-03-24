@@ -70,28 +70,23 @@ class WheatBRIDGES(CompositeModel):
                                                 components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot))
         
         # Specific here TODO remove later
-        self.root_water.post_coupling_init()
+        self.root_water.collar_children = self.root_growth.collar_children
+        self.root_water.collar_skip = self.root_growth.collar_skip
+        self.root_cn.collar_children = self.root_growth.collar_children
+        self.root_cn.collar_skip = self.root_growth.collar_skip
 
 
     def run(self):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
-        
-        # Update environment boundary conditions
-        self.soil()
 
         # Compute shoot flows and state balance for CN-wheat
         self.shoot()
 
         # Compute root growth from resulting states
-        self.root_growth()
+        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"])
         
-        # Extend property dictionaries after growth
-        self.root_anatomy.post_growth_updating()
-        self.root_water.post_growth_updating()
-        self.root_cn.post_growth_updating()
-        self.soil.post_growth_updating()
-        # self.soil.compute_mtg_voxel_neighbors()
-        # self.soil.get_from_voxel()
+        self.soil.compute_mtg_voxel_neighbors()
+        self.soil.get_from_voxel()
 
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
@@ -99,6 +94,9 @@ class WheatBRIDGES(CompositeModel):
         # Compute state variations for water and then carbon and nitrogen
         self.root_water()
         self.root_cn()
+
+        # Update environment boundary conditions
+        self.soil()
 
         self.time += 1
 
