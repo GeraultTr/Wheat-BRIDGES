@@ -57,8 +57,8 @@ class WheatBRIDGES(CompositeModel):
             self.root_growth = RootGrowthModelCoupled(g=None, time_step=time_step, **root_parameters)
         self.g_root = self.root_growth.g
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
-        self.root_water = RootWaterModel(self.g_root, time_step/10, **root_parameters)
-        self.root_cn = RootCNUnified(self.g_root, time_step/3, **root_parameters)
+        self.root_water = RootWaterModel(self.g_root, time_step, **root_parameters)
+        self.root_cn = RootCNUnified(self.g_root, time_step, **root_parameters)
         self.soil = SoilModel(self.g_root, time_step, **root_parameters)
         self.soil_voxels = self.soil.voxels
         self.shoot = WheatFSPM(root_mtg=self.g_root, **scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
@@ -98,5 +98,38 @@ class WheatBRIDGES(CompositeModel):
         # Update environment boundary conditions
         self.soil()
 
+        # le = self.shoot.g.get_vertex_property(815)
+        # if "geometry" in le:
+        #     print(self.time, le)
+        #     raise KeyboardInterrupt
+
+        # if self.time > 200:
+        #     inspect_mtg_structure(self.shoot.g)
+
+
         self.time += 1
 
+
+def inspect_mtg_structure(g):
+    print(g.components_at_scale(1, 1))
+    axis_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(1, 2)]
+    axis_vids = [vid for vid in g.components_at_scale(1, 2)]
+    print(dict(zip(axis_vids, [e["label"] for e in axis_scale])))
+    chosenid = int(input("which axis?"))
+    print(g.get_vertex_property(chosenid))
+    metamer_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(chosenid, 3)]
+    metamer_vids = [vid for vid in g.components_at_scale(chosenid, 3)]
+    print(dict(zip(metamer_vids, [e["label"] for e in metamer_scale])))
+    chosenid = int(input("which metamer?"))
+    print(g.get_vertex_property(chosenid))
+    organ_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(chosenid, 4)]
+    organ_vids = [vid for vid in g.components_at_scale(chosenid, 4)]
+    print(dict(zip(organ_vids, [e["label"] for e in organ_scale])))
+    chosenid = int(input("which organ?"))
+    print(g.get_vertex_property(chosenid))
+    elt_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(chosenid, 5)]
+    elt_vids = [vid for vid in g.components_at_scale(chosenid, 5)]
+    print(dict(zip(elt_vids, [e["label"] for e in elt_scale])))
+    chosenid = int(input("which element?"))
+    print(g.get_vertex_property(chosenid))
+    input()

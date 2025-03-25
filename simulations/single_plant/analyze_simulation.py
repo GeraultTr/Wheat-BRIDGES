@@ -6,7 +6,7 @@ from analyze.analyze import analyze_data
 if __name__ == '__main__':
 
     # scenarios = ["WB_lowS7"]
-    scenarios = ["WB_lowS7"]
+    scenarios = ["WB_lowS7_O2"]
 
     #output_path = "outputs"
     #output_path = "C:/Users/tigerault/OneDrive - agroparistech.fr/Thesis/Sujet/Modelling/saved_scenarios/05-06_hairless_tests"
