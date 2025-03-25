@@ -98,38 +98,4 @@ class WheatBRIDGES(CompositeModel):
         # Update environment boundary conditions
         self.soil()
 
-        # le = self.shoot.g.get_vertex_property(815)
-        # if "geometry" in le:
-        #     print(self.time, le)
-        #     raise KeyboardInterrupt
-
-        # if self.time > 200:
-        #     inspect_mtg_structure(self.shoot.g)
-
-
         self.time += 1
-
-
-def inspect_mtg_structure(g):
-    print(g.components_at_scale(1, 1))
-    axis_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(1, 2)]
-    axis_vids = [vid for vid in g.components_at_scale(1, 2)]
-    print(dict(zip(axis_vids, [e["label"] for e in axis_scale])))
-    chosenid = int(input("which axis?"))
-    print(g.get_vertex_property(chosenid))
-    metamer_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(chosenid, 3)]
-    metamer_vids = [vid for vid in g.components_at_scale(chosenid, 3)]
-    print(dict(zip(metamer_vids, [e["label"] for e in metamer_scale])))
-    chosenid = int(input("which metamer?"))
-    print(g.get_vertex_property(chosenid))
-    organ_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(chosenid, 4)]
-    organ_vids = [vid for vid in g.components_at_scale(chosenid, 4)]
-    print(dict(zip(organ_vids, [e["label"] for e in organ_scale])))
-    chosenid = int(input("which organ?"))
-    print(g.get_vertex_property(chosenid))
-    elt_scale = [g.get_vertex_property(vid) for vid in g.components_at_scale(chosenid, 5)]
-    elt_vids = [vid for vid in g.components_at_scale(chosenid, 5)]
-    print(dict(zip(elt_vids, [e["label"] for e in elt_scale])))
-    chosenid = int(input("which element?"))
-    print(g.get_vertex_property(chosenid))
-    input()
