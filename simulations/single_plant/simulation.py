@@ -75,5 +75,5 @@ def simulate_scenarios(scenarios, simulation_length=24, echo=True, custom_prefix
 
 if __name__ == '__main__':
 
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_ref1", "WB_ref2", "WB_ref3"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_ref1"])
     simulate_scenarios(scenarios, simulation_length=2500, log_settings=Logger.medium_log_focus_images)
