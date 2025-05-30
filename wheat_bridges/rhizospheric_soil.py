@@ -22,7 +22,7 @@ class RhizosphericSoil(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, time_step: int, **scenario):
+    def __init__(self, shared_mtgs: dict, shared_soil: dict, time_step: int,  **scenario):
         """
         DESCRIPTION
         ----------
@@ -38,16 +38,27 @@ class RhizosphericSoil(CompositeModel):
         self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
-        if len(scenario["input_soil"]) > 0:
-            self.soil = SoilModel(scenario["input_soil"], time_step, **parameters)
+        if shared_soil is not None:
+            self.soil = SoilModel(time_step_in_seconds=time_step, shared_soil=shared_soil, **parameters)
         else:
-            self.soil = SoilModel(time_step, **parameters)
+            self.soil = SoilModel(time_step_in_seconds=time_step, **parameters)
 
         self.soil_voxels = self.soil.voxels
 
-        # No module to link as all soil processes are grouped in the same component for now.
+        
+        # Manually assigning data structure for logger retreive
+        self.declare_data(soil=self.soil_voxels)
+        self.components = [self.soil]
 
-        self.declare_data_structures(soil=self.soil_voxels)
+        # LINKING MODULES
+        # NOTE only plant to soil is necessary since plants retreive all soil states
+        for _, g in shared_mtgs.items():
+            props = g.properties()
+            print(props["plant_id"])
+            # Performed for every mtg in case we use different models
+            self.couple_current_with_components_list(receiver=self.soil, components=props["carried_components"], 
+                                                    translator=self.open_or_create_translator(wheat_bridges.__path__[0]), 
+                                                    subcategory=props["model_name"])
 
 
     def run(self):
