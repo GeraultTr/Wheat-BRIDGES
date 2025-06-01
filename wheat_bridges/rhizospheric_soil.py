@@ -22,7 +22,7 @@ class RhizosphericSoil(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, shared_mtgs: dict, shared_soil: dict, time_step: int,  **scenario):
+    def __init__(self, shared_root_mtgs: dict, shared_soil: dict, time_step: int,  **scenario):
         """
         DESCRIPTION
         ----------
@@ -45,27 +45,36 @@ class RhizosphericSoil(CompositeModel):
 
         self.soil_voxels = self.soil.voxels
 
-        
         # Manually assigning data structure for logger retreive
         self.declare_data(soil=self.soil_voxels)
         self.components = [self.soil]
 
         # LINKING MODULES
         # NOTE only plant to soil is necessary since plants retreive all soil states
-        for _, g in shared_mtgs.items():
-            props = g.properties()
-            print(props["plant_id"])
+        for id, props in shared_root_mtgs.items():
+            vertices = props["vertex_index"].keys()
+
             # Performed for every mtg in case we use different models
             self.couple_current_with_components_list(receiver=self.soil, components=props["carried_components"], 
                                                     translator=self.open_or_create_translator(wheat_bridges.__path__[0]), 
                                                     subcategory=props["model_name"])
+            
+            # Step to ensure every neighbor gets computed at first
+            props["voxel_neighbor"] = {vid: None for vid in vertices}
+
+            # Requiered because soil states need to be written in the MTGs by soil, but hadn't been initialized by plants
+            for variable_name in self.soil.state_variables:
+                if variable_name not in props.keys() and variable_name != "voxel_neighbor":
+                    props[variable_name] = {}
+
+            shared_root_mtgs[id] = props
+            
 
 
-    def run(self):
+    def run(self, shared_root_mtgs):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
-
         # Update environment boundary conditions
-        self.soil()
+        self.soil(shared_root_mtgs=shared_root_mtgs)
 
         self.time += 1
 
