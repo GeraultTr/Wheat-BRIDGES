@@ -93,18 +93,19 @@ class WheatBRIDGES(CompositeModel):
         # Retrieve soil status for plant
         # NOTE : mandatory process pointer otherwise there is a huge access overhead since each plant does it in parallel
         local_pointer = self.shared_root_mtgs[self.props["plant_id"]]
+        # print(local_pointer["microbial_N"])
+        # print(local_pointer["microbial_C"])
 
         # NOTE : here you have to perform a per-variable update otherwise dynamic links are broken
-        for variable_name in local_pointer.keys():
-            if variable_name not in ['focus_elements', 'plant_id', 'model_name', 'carried_components']:
-                if variable_name not in self.props.keys():
-                    self.props[variable_name] = {}
-                self.props[variable_name].update(local_pointer[variable_name])
-                # if variable_name == "soil_temperature":
-                #     print("actual", self.props[variable_name])
-                #     print("given", local_pointer["soil_temperature"])
-        
+        for variable_name in self.soil_outputs + ["voxel_neighbor"]:
+            if variable_name not in self.props.keys():
+                self.props[variable_name] = {}
+            
+            self.props[variable_name].update(local_pointer[variable_name])
 
+        # Compute root growth from resulting states
+        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"],
+                         soil_boundaries_to_infer=self.soil_outputs)
 
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
@@ -115,9 +116,6 @@ class WheatBRIDGES(CompositeModel):
 
         # Compute shoot flows and state balance for CN-wheat
         self.shoot()
-
-        # Compute root growth from resulting states
-        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"])
 
         # Send plant status to soil
         self.shared_root_mtgs[self.props["plant_id"]] = self.props

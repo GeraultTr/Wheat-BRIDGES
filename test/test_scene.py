@@ -18,4 +18,4 @@ if __name__ == "__main__":
     play_Orchestra(scene_name="Test_scene", output_folder="outputs", plant_models=[WheatBRIDGES], plant_scenarios=[scenarios["WB_ref1"]], 
                            soil_model=RhizosphericSoil, soil_scenario=scenarios["WB_ref1"], 
                            xrange=0.15, yrange=0.15,
-                           n_iterations=2500)
+                           n_iterations=24)

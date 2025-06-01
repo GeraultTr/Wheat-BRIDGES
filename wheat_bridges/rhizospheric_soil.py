@@ -54,10 +54,13 @@ class RhizosphericSoil(CompositeModel):
         for id, props in shared_root_mtgs.items():
             vertices = props["vertex_index"].keys()
 
+            translator = self.open_or_create_translator(wheat_bridges.__path__[0])
             # Performed for every mtg in case we use different models
             self.couple_current_with_components_list(receiver=self.soil, components=props["carried_components"], 
-                                                    translator=self.open_or_create_translator(wheat_bridges.__path__[0]), 
+                                                    translator=translator, 
                                                     subcategory=props["model_name"])
+            
+            self.soil_inputs, self.soil_outputs = self.get_component_inputs_outputs(translator=translator, components_names=props["carried_components"], target_name=self.soil.__class__.__name__, names_for_others=False)
             
             # Step to ensure every neighbor gets computed at first
             props["voxel_neighbor"] = {vid: None for vid in vertices}
@@ -74,7 +77,7 @@ class RhizosphericSoil(CompositeModel):
     def run(self, shared_root_mtgs):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
         # Update environment boundary conditions
-        self.soil(shared_root_mtgs=shared_root_mtgs)
+        self.soil(shared_root_mtgs=shared_root_mtgs, soil_outputs=self.soil_outputs)
 
         self.time += 1
 
