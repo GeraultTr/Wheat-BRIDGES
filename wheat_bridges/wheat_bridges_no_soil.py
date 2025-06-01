@@ -31,7 +31,7 @@ class WheatBRIDGES(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, shared_root_mtgs: dict={}, soil_dict: dict={},  name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, **scenario):
+    def __init__(self, shared_root_mtgs: dict={}, name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, **scenario):
         """
         DESCRIPTION
         ----------
@@ -42,6 +42,9 @@ class WheatBRIDGES(CompositeModel):
         """
         # DECLARE GLOBAL SIMULATION TIME STEP, FOR THE CHOREGRAPHER TO KNOW IF IT HAS TO SUBDIVIDE TIME-STEPS
         self.name = name
+        self.coordinates = coordinates
+        self.rotation = rotation
+
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
 
@@ -77,8 +80,7 @@ class WheatBRIDGES(CompositeModel):
         self.props = self.g_root.properties()
 
         # Performed in initialization and run to update coordinates
-        if "angle_down" in self.props.keys():
-            plot_mtg(self.g_root)
+        plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
 
         self.props["plant_id"] = name
         self.props["model_name"] = self.__class__.__name__
@@ -106,6 +108,10 @@ class WheatBRIDGES(CompositeModel):
         # Compute root growth from resulting states
         self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"],
                          soil_boundaries_to_infer=self.soil_outputs)
+        
+        # Update MTG coordinates accounting for position in the scene
+        plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
+        print(self.props["y1"][1], self.name)
 
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
