@@ -111,7 +111,6 @@ class WheatBRIDGES(CompositeModel):
         
         # Update MTG coordinates accounting for position in the scene
         plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
-        print(self.props["y1"][1], self.name)
 
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()

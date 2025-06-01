@@ -22,7 +22,7 @@ class RhizosphericSoil(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, shared_root_mtgs: dict, shared_soil: dict, time_step: int,  **scenario):
+    def __init__(self, shared_root_mtgs: dict, shared_soil: dict, time_step: int, scene_xrange: float, scene_yrange: float,  **scenario):
         """
         DESCRIPTION
         ----------
@@ -39,9 +39,11 @@ class RhizosphericSoil(CompositeModel):
 
         # INIT INDIVIDUAL MODULES
         if shared_soil is not None:
-            self.soil = SoilModel(time_step_in_seconds=time_step, shared_soil=shared_soil, **parameters)
+            self.soil = SoilModel(time_step_in_seconds=time_step, shared_soil=shared_soil,
+                                  scene_xrange=scene_xrange, scene_yrange=scene_yrange, **parameters)
         else:
-            self.soil = SoilModel(time_step_in_seconds=time_step, **parameters)
+            self.soil = SoilModel(time_step_in_seconds=time_step,
+                                  scene_xrange=scene_xrange, scene_yrange=scene_yrange, **parameters)
 
         self.soil_voxels = self.soil.voxels
 
