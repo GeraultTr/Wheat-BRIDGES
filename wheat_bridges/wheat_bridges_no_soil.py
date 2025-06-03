@@ -33,7 +33,9 @@ class WheatBRIDGES(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, shared_root_mtgs: dict={}, shared_shoot_mtgs: dict={}, name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, **scenario):
+    def __init__(self, queues_soil_to_plants, queue_plants_to_soil, 
+                queues_light_to_plants, queue_plants_to_light,
+                name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, **scenario):
         """
         DESCRIPTION
         ----------
@@ -79,8 +81,13 @@ class WheatBRIDGES(CompositeModel):
         self.root_cn.collar_skip = self.root_growth.collar_skip
 
         # Provide signature for the MTG
-        self.shared_root_mtgs = shared_root_mtgs
-        self.shared_shoot_mtgs = shared_shoot_mtgs
+        # Retreive the queues to communicate with environment models
+        self.queues_soil_to_plants=queues_soil_to_plants
+        self.queue_plants_to_soil=queue_plants_to_soil
+        self.queues_light_to_plants=queues_light_to_plants
+        self.queue_plants_to_light=queue_plants_to_light
+
+        # Get properties from each MTG
         self.root_props = self.g_root.properties()
         self.shoot_props = self.g_shoot.properties()
         
@@ -92,7 +99,7 @@ class WheatBRIDGES(CompositeModel):
         self.root_props["plant_id"] = name
         self.root_props["model_name"] = self.__class__.__name__
         self.root_props["carried_components"] = [component.__class__.__name__ for component in self.components]
-        self.shared_root_mtgs[self.name] = self.root_props
+        self.queue_plants_to_soil.put({"plant_id": self.name, "data": self.root_props})
 
         # SHOOT ARCHITECTURE INITIAL PASSING
         # NOTE : Here we pass the tesselated scene since otherwise plantgl rotated geometries are not pickable
@@ -104,7 +111,13 @@ class WheatBRIDGES(CompositeModel):
                                 "rotation": self.rotation,
                                 "scene": c_scene,
                                 "class_name": {vid: self.g_shoot.class_name(vid) for vid in self.g_shoot.property('geometry').keys()}}
-        self.shared_shoot_mtgs[self.name] = selective_light_inputs
+        self.queue_plants_to_light.put({"plant_id": self.name, "data": selective_light_inputs})
+
+        # Retreive post environments init states
+        self.get_environment_boundaries()
+
+        # Send command to environments models to run first
+        self.send_plant_status_to_environment()
 
 
     def run(self):
@@ -112,7 +125,7 @@ class WheatBRIDGES(CompositeModel):
 
         # Retrieve soil and light status for plant
         self.get_environment_boundaries()
-
+        
         # Compute root growth from resulting states
         self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"],
                          soil_boundaries_to_infer=self.soil_outputs)
@@ -137,25 +150,25 @@ class WheatBRIDGES(CompositeModel):
 
 
     def get_environment_boundaries(self):
-        # NOTE : mandatory process pointer otherwise there is a huge access overhead since each plant does it in parallel
-        root_props_pointer = self.shared_root_mtgs[self.name]
-        light_props_pointer = self.shared_shoot_mtgs[self.name]
+        # Wait for results from both soil and light model before begining
+        soil_boundary_props = self.queues_soil_to_plants[self.name].get()
+        light_boundary_props = self.queues_light_to_plants[self.name].get()
 
         # NOTE : here you have to perform a per-variable update otherwise dynamic links are broken
         for variable_name in self.soil_outputs + ["voxel_neighbor"]: # TODO : soil_outputs come from declare_data_and_couple_components, not a good structure to keep
             if variable_name not in self.root_props.keys():
                 self.root_props[variable_name] = {}
             
-            self.root_props[variable_name].update(root_props_pointer[variable_name])
+            self.root_props[variable_name].update(soil_boundary_props[variable_name])
 
-        for variable_name in light_props_pointer.keys():
+        for variable_name in light_boundary_props.keys():
             if variable_name not in self.shoot_props.keys():
                 self.shoot_props[variable_name] = {}
-            self.shoot_props[variable_name].update(light_props_pointer[variable_name])
+            self.shoot_props[variable_name].update(light_boundary_props[variable_name])
 
 
     def send_plant_status_to_environment(self):
-        self.shared_root_mtgs[self.name] = self.root_props
+        self.queue_plants_to_soil.put({"plant_id": self.name, "data": self.root_props})
 
         # Get scene from Adel and then convert it to triangles as it is pickable
         scene = Adel.scene(self.g_shoot)
@@ -165,4 +178,5 @@ class WheatBRIDGES(CompositeModel):
                                 "rotation": self.rotation,
                                 "scene": c_scene,
                                 "class_name": {vid: self.g_shoot.class_name(vid) for vid in self.g_shoot.property('geometry').keys()}}
-        self.shared_shoot_mtgs[self.name] = selective_light_inputs
+        
+        self.queue_plants_to_light.put({"plant_id": self.name, "data": selective_light_inputs})

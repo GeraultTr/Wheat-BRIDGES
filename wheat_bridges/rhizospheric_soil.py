@@ -22,7 +22,7 @@ class RhizosphericSoil(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, shared_root_mtgs: dict, time_step: int, scene_xrange: float, scene_yrange: float,  **scenario):
+    def __init__(self, queues_soil_to_plants, queue_plants_to_soil, time_step: int, scene_xrange: float, scene_yrange: float,  **scenario):
         """
         DESCRIPTION
         ----------
@@ -47,9 +47,19 @@ class RhizosphericSoil(CompositeModel):
         self.declare_data(soil=self.soil_voxels)
         self.components = [self.soil]
 
-        # LINKING MODULES
-        # NOTE only plant to soil is necessary since plants retreive all soil states
-        for id, props in shared_root_mtgs.items():
+        self.queues_soil_to_plants=queues_soil_to_plants
+        self.queue_plants_to_soil=queue_plants_to_soil
+
+        # Waiting for all plants to put their outputs
+        batch = []
+        for _ in range(len(self.queues_soil_to_plants)):
+            batch.append(self.queue_plants_to_soil.get())
+
+        # LINKING MODULES after plant initialization
+        for plant_data in batch:
+            # Unpacking message
+            id = plant_data["plant_id"]
+            props = plant_data["data"]
             vertices = props["vertex_index"].keys()
 
             translator = self.open_or_create_translator(wheat_bridges.__path__[0])
@@ -68,14 +78,12 @@ class RhizosphericSoil(CompositeModel):
                 if variable_name not in props.keys() and variable_name != "voxel_neighbor":
                     props[variable_name] = {}
 
-            shared_root_mtgs[id] = props
-            
+            self.queues_soil_to_plants[id].put(props)
 
-
-    def run(self, shared_root_mtgs):
+    def run(self):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
         # Update environment boundary conditions
-        self.soil(shared_root_mtgs=shared_root_mtgs, soil_outputs=self.soil_outputs)
+        self.soil(queue_plants_to_soil=self.queue_plants_to_soil, queues_soil_to_plants=self.queues_soil_to_plants, soil_outputs=self.soil_outputs)
 
         self.time += 1
 
