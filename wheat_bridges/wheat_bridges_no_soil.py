@@ -35,7 +35,7 @@ class WheatBRIDGES(CompositeModel):
 
     def __init__(self, queues_soil_to_plants, queue_plants_to_soil, 
                 queues_light_to_plants, queue_plants_to_light,
-                name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, **scenario):
+                name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, translator_path: dict = {}, **scenario):
         """
         DESCRIPTION
         ----------
@@ -71,7 +71,7 @@ class WheatBRIDGES(CompositeModel):
         
         # LINKING MODULES
         self.declare_data_and_couple_components(root=self.g_root, shoot=self.g_shoot,
-                                                translator_path=wheat_bridges.__path__[0],
+                                                translator_path=translator_path,
                                                 components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.shoot))
         
         # Specific here TODO remove later

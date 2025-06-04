@@ -22,7 +22,7 @@ class RhizosphericSoil(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, queues_soil_to_plants, queue_plants_to_soil, time_step: int, scene_xrange: float, scene_yrange: float,  **scenario):
+    def __init__(self, queues_soil_to_plants, queue_plants_to_soil, time_step: int, scene_xrange: float, scene_yrange: float, translator_path: dict,  **scenario):
         """
         DESCRIPTION
         ----------
@@ -62,7 +62,8 @@ class RhizosphericSoil(CompositeModel):
             props = plant_data["data"]
             vertices = props["vertex_index"].keys()
 
-            translator = self.open_or_create_translator(wheat_bridges.__path__[0])
+            translator = self.open_or_create_translator(translator_path)
+
             # Performed for every mtg in case we use different models
             self.couple_current_with_components_list(receiver=self.soil, components=props["carried_components"], 
                                                     translator=translator, 
