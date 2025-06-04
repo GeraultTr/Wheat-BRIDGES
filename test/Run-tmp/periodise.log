@@ -1,0 +1,13 @@
+Attention - Pas de proprietes optiques
+ ==> Utilisation des valeur par defaut du NIR
+espid=1e+11
+ -_-_-_-_-_  Primitives chargees
+
+Canopy [parse_can] nbre de primitives = 285
+Infty: Bornemax[0] = 0  Bornemin[0] = 0
+Infty: Bornemax[1] = 0.15  Bornemin[1] = 0.15
+Infty: Bornemax[2] = 0.099696  Bornemin[2] = -4.6e-05
+==>  minr = -4.6e-05 -->  delta2 = 4.6e-05
+ [1]Bornemin[0] = 0  Bornemax[0] = 0
+ [1]Bornemin[1] = 0.15  Bornemax[1] = 0.15
+ [1]Bornemin[2] = -0.00104342  Bornemax[2] = 0.099696
