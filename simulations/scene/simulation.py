@@ -11,11 +11,11 @@ from metafspm.scene_wrapper import play_Orchestra
 
 
 if __name__ == "__main__":
-    scenarios = ms.from_table(file_path="inputs/Scenarios_24-11-06.xlsx", which=["WB_ref1"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_25-06-05.xlsx", which=["WB_ref1"])
     for scenario_name, scenario in scenarios.items():
         play_Orchestra(scene_name=scenario_name, output_folder="outputs", plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                             soil_model=RhizosphericSoil, soil_scenario=scenario, light_model=LightModel,
                             translator_path=wheat_bridges.__path__[0],
                             logger_class=Logger, log_settings=Logger.light_log,
-                            scene_xrange=0.15, scene_yrange=0.15, sowing_density=250,
+                            scene_xrange=0.15, scene_yrange=0.15, sowing_density=1,
                             n_iterations=1000)

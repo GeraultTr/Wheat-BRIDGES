@@ -4,8 +4,8 @@ import wheat_bridges
 from root_bridges.soil_model import SoilModel
 
 # Utilities
-from metafspm.composite_wrapper import CompositeModel
-from metafspm.component_factory import Choregrapher
+from openalea.metafspm.composite_wrapper import CompositeModel
+from openalea.metafspm.component_factory import Choregrapher
 
 
 class RhizosphericSoil(CompositeModel):

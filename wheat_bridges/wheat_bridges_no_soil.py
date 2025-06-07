@@ -12,8 +12,8 @@ from root_cynaps.root_water import RootWaterModel
 from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
 
 # Utilities
-from metafspm.composite_wrapper import CompositeModel
-from metafspm.component_factory import Choregrapher
+from openalea.metafspm.composite_wrapper import CompositeModel
+from openalea.metafspm.component_factory import Choregrapher
 from log.visualize import plot_mtg
 from alinea.adel.adel import Adel
 from alinea.caribu.plantgl_adaptor import scene_to_cscene
