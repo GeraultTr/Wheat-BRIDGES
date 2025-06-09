@@ -57,7 +57,7 @@ class LightModel:
 
         # Run the model
         # c_stand_scene_sky.debug = True
-        raw, aggregated_sky = c_stand_scene_sky.run(direct=True, infinite=False)
+        raw, aggregated_sky = c_stand_scene_sky.run(direct=True, infinite=True)
 
         # Build expected outputs from raw outputs
         outputs = {}

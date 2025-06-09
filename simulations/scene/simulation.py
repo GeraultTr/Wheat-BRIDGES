@@ -7,7 +7,7 @@ from wheat_bridges.caribu_component import LightModel
 # Utility packages
 from initialize.initialize import MakeScenarios as ms
 from log.logging import Logger
-from metafspm.scene_wrapper import play_Orchestra
+from openalea.metafspm.scene_wrapper import play_Orchestra
 
 
 if __name__ == "__main__":
@@ -18,4 +18,4 @@ if __name__ == "__main__":
                             translator_path=wheat_bridges.__path__[0],
                             logger_class=Logger, log_settings=Logger.light_log,
                             scene_xrange=0.15, scene_yrange=0.15, sowing_density=1,
-                            n_iterations=1000)
+                            n_iterations=50*24)
