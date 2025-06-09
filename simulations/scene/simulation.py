@@ -16,6 +16,6 @@ if __name__ == "__main__":
         play_Orchestra(scene_name=scenario_name, output_folder="outputs", plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                             soil_model=RhizosphericSoil, soil_scenario=scenario, light_model=LightModel,
                             translator_path=wheat_bridges.__path__[0],
-                            logger_class=Logger, log_settings=Logger.light_log,
+                            logger_class=Logger, log_settings=Logger.medium_log_focus_properties,
                             scene_xrange=0.15, scene_yrange=0.15, sowing_density=1,
                             n_iterations=50*24)
