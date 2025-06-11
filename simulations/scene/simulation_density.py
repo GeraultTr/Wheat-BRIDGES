@@ -15,11 +15,14 @@ from openalea.metafspm.scene_wrapper import play_Orchestra
 
 if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-06-05.xlsx", which=["WB_ref1"])
-    densities = [50, 200, 400]
+    # output_folder = "outputs"
+    output_folder = "outputs/batch2"
+    # densities = [50, 200, 400]
+    densities = [50, 400]
 
     parallel = True
-    scene_xrange = 0.2
-    scene_yrange = 0.2
+    scene_xrange = 0.15
+    scene_yrange = 0.15
     environment_models_number = 2
     subprocesses_number = [int(max(scene_xrange * scene_yrange * density, 1)) + environment_models_number for density in densities]
     parallel_development = 0 # To keep room in CPUs if launching dev simulations in parallel on the machine
@@ -39,14 +42,14 @@ if __name__ == "__main__":
                             processes.remove(proc)
                             # Supposing they exit in the same order than the input list
                             total_running_processes -= subprocesses_number[finished_process] + 1
-                            finished_processes += 1
+                            finished_process += 1
                     time.sleep(1)
                 
                 # If going through, subprocesses are launched
                 total_running_processes += requiered_subprocesses + 1 # + 1 for the one about to be lauched
                 print("Total running processes = ", total_running_processes)
 
-                p = mp.Process(target=play_Orchestra, kwargs=dict(scene_name=f"{scenario_name}_{target_density}", output_folder="outputs", plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
+                p = mp.Process(target=play_Orchestra, kwargs=dict(scene_name=f"{scenario_name}_{target_density}", output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                     soil_model=RhizosphericSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.medium_log_focus_properties,
@@ -60,7 +63,7 @@ if __name__ == "__main__":
         for target_density in densities:
             for scenario_name, scenario in scenarios.items():
 
-                play_Orchestra(scene_name=scenario_name + "_" + target_density, output_folder="outputs", plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
+                play_Orchestra(scene_name=scenario_name + "_" + target_density, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                     soil_model=RhizosphericSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.medium_log_focus_properties,
