@@ -9,7 +9,8 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/simulations/single_plant",
+            "cwd": "${workspaceFolder}/Root_BRIDGES/root_cynaps/simulations/scene",
+            // "cwd": "${workspaceFolder}/simulations/single_plant",
         }
     ]
 }

@@ -34,7 +34,7 @@ class RhizosphericSoil(CompositeModel):
         # DECLARE GLOBAL SIMULATION TIME STEP, FOR THE CHOREGRAPHER TO KNOW IF IT HAS TO SUBDIVIDE TIME-STEPS
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
-        soil_parameters = scenario["parameters"]["root_bridges"]["roots"]
+        soil_parameters = scenario["parameters"]["soil_model"]["soil"]
         self.input_tables = scenario["input_tables"]
 
         # INIT INDIVIDUAL MODULES
