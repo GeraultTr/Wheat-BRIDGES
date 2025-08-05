@@ -61,8 +61,4 @@ if __name__ == '__main__':
                             animate_raw_logs=False,
                             target_properties=None,
                             on_shoot_logs=True
-                            )
-        
-        # In the end put the system to sleep, Windows only
-        # os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
-    
+            )

@@ -1,12 +1,11 @@
-import wheat_bridges
 
 # Edited models
 from root_bridges.root_CN import RootCNUnified
 from root_bridges.root_growth import RootGrowthModelCoupled
 
 # Untouched models
-from rhizodep.root_anatomy import RootAnatomy
-from root_cynaps.root_water import RootWaterModel
+from openalea.rootcynaps import RootAnatomy
+from openalea.rootcynaps import RootWaterModel
 
 # Shoot Model
 from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
@@ -14,7 +13,7 @@ from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel
 from openalea.metafspm.component_factory import Choregrapher
-from log.visualize import plot_mtg
+from openalea.fspm.utility.writer.visualize import plot_mtg
 from alinea.adel.adel import Adel
 from alinea.caribu.plantgl_adaptor import scene_to_cscene
 

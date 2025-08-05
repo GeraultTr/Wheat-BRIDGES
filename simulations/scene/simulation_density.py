@@ -3,58 +3,64 @@ import time
 
 # Model packages
 import wheat_bridges
-from wheat_bridges.rhizospheric_soil import RhizosphericSoil
+from openalea.rhizosoil.model import RhizoSoil
 from wheat_bridges.wheat_bridges_no_soil import WheatBRIDGES
 from wheat_bridges.caribu_component import LightModel
 
 # Utility packages
-from initialize.initialize import MakeScenarios as ms
-from log.logging import Logger
+from openalea.fspm.utility.scenario.initialize import MakeScenarios as ms
+from openalea.fspm.utility.writer.logging import Logger
 from openalea.metafspm.scene_wrapper import play_Orchestra
+from openalea.fspm.utility.plot import analyze_data
 
 
 if __name__ == "__main__":
-    scenarios = ms.from_table(file_path="inputs/Scenarios_25-06-05.xlsx", which=["WB_ref1"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref1"])
     # output_folder = "outputs"
-    output_folder = "outputs/batch2"
+    output_folder = "outputs/recoupling"
     # densities = [50, 200, 400]
-    densities = [50, 400]
-
-    parallel = True
+    # densities = [50, 400]
+    densities = [50]
+    
     scene_xrange = 0.15
     scene_yrange = 0.15
     environment_models_number = 2
     subprocesses_number = [int(max(scene_xrange * scene_yrange * density, 1)) + environment_models_number for density in densities]
-    parallel_development = 0 # To keep room in CPUs if launching dev simulations in parallel on the machine
-    max_processes = mp.cpu_count() - 4 # to keep space for other processes to run normally (connecting, testing, writting on disk)
+    parallel_development = 1 # To keep room in CPUs if launching dev simulations in parallel on the machine
+    max_processes = mp.cpu_count() - max(subprocesses_number) - parallel_development - 1 # -1 for the main process
+
+    parallel = False
+    active_processes = 0 
+    processes = []
 
     if parallel:
-        processes = []
-        total_running_processes = 0
         finished_process = 0
         for target_density in densities:
             requiered_subprocesses = int(max(scene_xrange * scene_yrange * target_density, 1)) + environment_models_number
             for scenario_name, scenario in scenarios.items():
                 # Main process creation part
-                while total_running_processes + requiered_subprocesses >= max_processes:
+                while True:
+                    # Remove any finished processes and join them to release resources
+                    alive_processes = []
                     for proc in processes:
-                        if not proc.is_alive():
-                            processes.remove(proc)
-                            # Supposing they exit in the same order than the input list
-                            total_running_processes -= subprocesses_number[finished_process] + 1
-                            finished_process += 1
+                        if proc.is_alive():
+                            alive_processes.append(proc)
+                        else:
+                            proc.join()
+                    processes = alive_processes
+
+                    if len(processes) < max_processes:
+                        break
                     time.sleep(1)
-                
-                # If going through, subprocesses are launched
-                total_running_processes += requiered_subprocesses + 1 # + 1 for the one about to be lauched
-                print("Total running processes = ", total_running_processes)
+
+                print(f"Launching {scenario_name}...")
 
                 p = mp.Process(target=play_Orchestra, kwargs=dict(scene_name=f"{scenario_name}_{target_density}", output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
-                                    soil_model=RhizosphericSoil, soil_scenario=scenario, light_model=LightModel,
+                                    soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
-                                    logger_class=Logger, log_settings=Logger.medium_log_focus_properties,
+                                    logger_class=Logger, log_settings=Logger.light_log,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density,
-                                    n_iterations=50*24))
+                                    time_step=3600, n_iterations=50*24))
 
                 p.start()
                 processes.append(p)
@@ -63,9 +69,23 @@ if __name__ == "__main__":
         for target_density in densities:
             for scenario_name, scenario in scenarios.items():
 
-                play_Orchestra(scene_name=scenario_name + "_" + target_density, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
-                                    soil_model=RhizosphericSoil, soil_scenario=scenario, light_model=LightModel,
+                play_Orchestra(scene_name=f"{scenario_name}_{target_density}", output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
+                                    soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
-                                    logger_class=Logger, log_settings=Logger.medium_log_focus_properties,
+                                    logger_class=Logger, log_settings=Logger.medium_log_focus_images,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density,
-                                    n_iterations=50*24)
+                                    time_step=3600, n_iterations=50*24)
+
+                target_folder_key = "WheatBRIDGES_0"
+
+                analyze_data(scenarios=[f"{scenario_name}_{target_density}"], outputs_dirpath=output_folder, target_folder_key=target_folder_key,
+                                inputs_dirpath="inputs",
+                                on_sums=True,
+                                on_performance=False,
+                                animate_raw_logs=False,
+                                target_properties=None
+                                )
+    # After all tasks started, join any remaining processes
+    for proc in processes:
+        proc.join()
+
