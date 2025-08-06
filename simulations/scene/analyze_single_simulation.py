@@ -7,7 +7,7 @@ from analyze.analyze import analyze_data
 
 if __name__ == '__main__':
         
-    scenarios = ["WB_ref1_400"]
+    scenarios = ["WB_ref1_50"]
     for scenario_name in scenarios:
         target_folder_key = "WheatBRIDGES_0"
         output_path = "outputs" 

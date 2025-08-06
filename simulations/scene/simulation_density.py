@@ -15,7 +15,7 @@ from openalea.fspm.utility.plot import analyze_data
 
 
 if __name__ == "__main__":
-    scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref1"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref2"])
     # output_folder = "outputs"
     output_folder = "outputs/recoupling"
     # densities = [50, 200, 400]
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                                     translator_path=wheat_bridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.medium_log_focus_images,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density,
-                                    time_step=3600, n_iterations=50*24)
+                                    time_step=3600, n_iterations=100*24)
 
                 target_folder_key = "WheatBRIDGES_0"
 
@@ -83,7 +83,8 @@ if __name__ == "__main__":
                                 on_sums=True,
                                 on_performance=False,
                                 animate_raw_logs=False,
-                                target_properties=None
+                                target_properties=None,
+                                on_shoot_logs=True
                                 )
     # After all tasks started, join any remaining processes
     for proc in processes:
