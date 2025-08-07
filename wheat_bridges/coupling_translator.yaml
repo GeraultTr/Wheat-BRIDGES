@@ -141,7 +141,9 @@ RootGrowthModelCoupled:
     soil_temperature:
       soil_temperature: 1.0
 
-  WheatFSPM: {}
+  WheatFSPM:
+    synchronize_adventitious_emergence:
+      synchronize_adventitious_emergence: 1.0
 
 
 
@@ -193,7 +195,7 @@ RootWaterModel:
 
   WheatFSPM:
     water_root_shoot_xylem:
-      Total_Transpiration: 0.001
+      Total_Transpiration: 0.001 * 18.07 / 1000000
 
 
 
