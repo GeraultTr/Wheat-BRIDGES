@@ -74,7 +74,7 @@ if __name__ == "__main__":
                                     translator_path=wheat_bridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.medium_log_focus_images,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density,
-                                    time_step=3600, n_iterations=100*24)
+                                    time_step=3600, n_iterations=2099)
 
                 target_folder_key = "WheatBRIDGES_0"
 

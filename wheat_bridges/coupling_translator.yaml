@@ -142,8 +142,8 @@ RootGrowthModelCoupled:
       soil_temperature: 1.0
 
   WheatFSPM:
-    synchronize_adventitious_emergence:
-      synchronize_adventitious_emergence: 1.0
+    adventitious_to_emerge:
+      adventitious_to_emerge: 1.0
 
 
 
