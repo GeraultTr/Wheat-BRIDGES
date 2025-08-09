@@ -126,8 +126,7 @@ class WheatBRIDGES(CompositeModel):
         self.get_environment_boundaries()
         
         # Compute root growth from resulting states
-        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"],
-                         soil_boundaries_to_infer=self.soil_outputs)
+        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"], soil_boundaries_to_infer=self.soil_outputs)
         
         # Update MTG coordinates accounting for position in the scene
         plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)

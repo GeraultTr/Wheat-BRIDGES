@@ -24,6 +24,7 @@ if __name__ == "__main__":
     
     scene_xrange = 0.15
     scene_yrange = 0.15
+    row_spacing = 0.15
     environment_models_number = 2
     subprocesses_number = [int(max(scene_xrange * scene_yrange * density, 1)) + environment_models_number for density in densities]
     parallel_development = 1 # To keep room in CPUs if launching dev simulations in parallel on the machine
@@ -59,7 +60,7 @@ if __name__ == "__main__":
                                     soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.light_log,
-                                    scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density,
+                                    scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                     time_step=3600, n_iterations=50*24))
 
                 p.start()
@@ -73,15 +74,15 @@ if __name__ == "__main__":
                                     soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.medium_log_focus_images,
-                                    scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density,
-                                    time_step=3600, n_iterations=2099)
+                                    scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
+                                    time_step=3600, n_iterations=2099, record_performance=True)
 
                 target_folder_key = "WheatBRIDGES_0"
 
                 analyze_data(scenarios=[f"{scenario_name}_{target_density}"], outputs_dirpath=output_folder, target_folder_key=target_folder_key,
                                 inputs_dirpath="inputs",
                                 on_sums=True,
-                                on_performance=False,
+                                on_performance=True,
                                 animate_raw_logs=False,
                                 target_properties=None,
                                 on_shoot_logs=True
