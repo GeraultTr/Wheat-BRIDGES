@@ -77,16 +77,22 @@ if __name__ == "__main__":
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                     time_step=3600, n_iterations=2099, record_performance=True)
 
-                target_folder_key = "WheatBRIDGES_0"
+                # target_folder_key = "WheatBRIDGES_0"
 
+                # analyze_data(scenarios=[f"{scenario_name}_{target_density}"], outputs_dirpath=output_folder, target_folder_key=target_folder_key,
+                #                 inputs_dirpath="inputs",
+                #                 on_sums=True,
+                #                 on_performance=True,
+                #                 animate_raw_logs=False,
+                #                 on_shoot_logs=True
+                #                 )
+                
+                target_folder_key = "Soil"
+                
                 analyze_data(scenarios=[f"{scenario_name}_{target_density}"], outputs_dirpath=output_folder, target_folder_key=target_folder_key,
                                 inputs_dirpath="inputs",
-                                on_sums=True,
-                                on_performance=True,
-                                animate_raw_logs=False,
-                                target_properties=None,
-                                on_shoot_logs=True
-                                )
+                                on_soil_logs=True)
+
     # After all tasks started, join any remaining processes
     for proc in processes:
         proc.join()
