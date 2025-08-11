@@ -84,10 +84,10 @@ if __name__ == "__main__":
 
                 analyze_data(scenarios=[full_scenario_name], outputs_dirpath=output_folder, target_folder_key=target_folder_key,
                                 inputs_dirpath="inputs",
-                                on_sums=True,
+                                on_sums=False,
                                 on_performance=True,
                                 animate_raw_logs=False,
-                                on_shoot_logs=True
+                                on_shoot_logs=False
                                 )
                 
                 target_folder_key = "Soil"
