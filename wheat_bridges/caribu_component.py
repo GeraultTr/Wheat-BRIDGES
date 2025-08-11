@@ -2,7 +2,10 @@
 # Utilities
 from alinea.caribu.CaribuScene import CaribuScene
 from alinea.caribu.sky_tools import GenSky, GetLight, Gensun, GetLightsSun, spitters_horaire
+import time
+import math
 
+debug = False
 
 class LightModel:
 
@@ -38,11 +41,16 @@ class LightModel:
         DOY = self.meteo.loc[self.time, ['DOY']].iloc[0]
         hour = self.meteo.loc[self.time, ['hour']].iloc[0]
         
+        t1 = time.time()
+
         # Get plants inputs
         # Waiting for all plants to put their outputs
         batch = []
         for _ in range(len(queues_light_to_plants)):
             batch.append(queue_plants_to_light.get())
+
+        t2 = time.time()
+        if debug: print("caribu wait plants : ", t2 - t1)
 
         # Initialize scene from multiple mtgs
         c_stand_scene_sky, c_stand_scene_sun, indexer = self._initialize_model_on_stand(batch=batch, 
@@ -57,7 +65,7 @@ class LightModel:
 
         # Run the model
         # c_stand_scene_sky.debug = True
-        raw, aggregated_sky = c_stand_scene_sky.run(direct=True, infinite=True)
+        raw, aggregated_sky = c_stand_scene_sky.run(direct=True, infinite=False)
 
         # Build expected outputs from raw outputs
         outputs = {}
@@ -72,6 +80,9 @@ class LightModel:
         
         outputs.update({'PARa': PARa, 'Erel': Erel})
 
+        t3 = time.time()
+        if debug: print("caribu solve", t3-t2)
+
         # Send dedicated results to each mtg
         for id, _ in queues_light_to_plants.items():
             sent_results = {variable_name: {} for variable_name in outputs.keys()}
@@ -79,6 +90,9 @@ class LightModel:
                 for variable_name, values in outputs.items():
                     sent_results[variable_name][original_id] = values[unique_id]
             queues_light_to_plants[id].put(sent_results)
+
+        t4 = time.time()
+        if debug: print('caribu send plants : ', t4 - t3)
 
         self.time += 1
 
@@ -153,7 +167,8 @@ class LightModel:
                 for i, triple in enumerate(triangle_scene[unique_shape_id]):
                     translated_triangle = []
                     for x, y, z in triple:
-                        translated_triangle.append((x + pos[0], y + pos[1], z + pos[2]))
+                        xr, yr, znr = rotate_point_z((x, y, z), rotation)
+                        translated_triangle.append((xr + pos[0], yr + pos[1], znr + pos[2]))
                     triangle_scene[unique_shape_id][i] = translated_triangle
 
                 # Next unique id
@@ -163,6 +178,24 @@ class LightModel:
         # print(stand_scene, sky, ((0, self.scene_xrange), (0, self.scene_yrange)), opt)
         c_stand_scene_sky = CaribuScene(scene=triangle_scene, light=sky, pattern=(0, 0, self.scene_xrange, self.scene_yrange), opt=opt)
         c_stand_scene_sun = CaribuScene(scene=triangle_scene, light=sun, pattern=(0, 0, self.scene_xrange, self.scene_yrange), opt=opt)
+
+        plantgl_scene = True
+        if plantgl_scene:
+            from alinea.caribu.display import generate_scene
+            pgl_scene = generate_scene(triangle_scene)
+            pgl_scene.save("outputs/recoupling/test.bgeom")
         
         return c_stand_scene_sky, c_stand_scene_sun, indexer
 
+
+def rotate_point_z(point, angle_deg):
+    """
+    Rotate a single 3D point around the vertical (z) axis by angle_deg (degrees).
+    Axis passes through (x,y) = (0,0).
+    """
+    x, y, z = point
+    t = math.radians(angle_deg)
+    c, s = math.cos(t), math.sin(t)
+    xr = c * x - s * y
+    yr = s * x + c * y
+    return (xr, yr, z)
