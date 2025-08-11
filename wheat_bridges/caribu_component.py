@@ -15,6 +15,10 @@ class LightModel:
     azimuts=4
     zenits=5
     prim_scale = False
+    CARIBU_TIMESTEP=4
+    previous_Erel=None
+    previous_Erel_prim=None
+    indexer=None
 
     def __init__(self, scene_xrange: float, scene_yrange: float, meteo, **scenario):
         """
@@ -40,6 +44,7 @@ class LightModel:
         PARi = self.meteo.loc[self.time, ['PARi']].iloc[0]
         DOY = self.meteo.loc[self.time, ['DOY']].iloc[0]
         hour = self.meteo.loc[self.time, ['hour']].iloc[0]
+        PARi_next_hours = self.meteo.loc[range(self.time, self.time + self.CARIBU_TIMESTEP), ['PARi']].sum().values[0]
         
         t1 = time.time()
 
@@ -52,41 +57,59 @@ class LightModel:
         t2 = time.time()
         if debug: print("caribu wait plants : ", t2 - t1)
 
-        # Initialize scene from multiple mtgs
-        c_stand_scene_sky, c_stand_scene_sun, indexer = self._initialize_model_on_stand(batch=batch, 
-                                                                                        energy=1,
-                                                                                        diffuse_model=self.diffuse_model,
-                                                                                        azimuts=self.azimuts,
-                                                                                        zenits=self.zenits,
-                                                                                        DOY=DOY,
-                                                                                        hourTU=hour,
-                                                                                        latitude=self.latitude
-                                                                                        )
-
-        # Run the model
-        # c_stand_scene_sky.debug = True
-        raw, aggregated_sky = c_stand_scene_sky.run(direct=True, infinite=False)
-
-        # Build expected outputs from raw outputs
         outputs = {}
-        Erel = aggregated_sky['par']['Eabs']  #: Erel is the relative surfacic absorbed energy per organ
-        PARa = {k: v * PARi for k, v in Erel.items()}
 
-        # Primitive scale
-        if self.prim_scale:
-            Erel_prim = raw['par']['Eabs']
-            raw_Eabs_abs = {k: [Eabs * PARi for Eabs in raw['par']['Eabs'][k]] for k in raw['par']['Eabs']}
-            outputs.update({'Erel_prim': Erel_prim, 'PARa_prim': raw_Eabs_abs, 'area_prim': raw['par']['area']})
+        # RUN Caribu
+        if (self.time % self.CARIBU_TIMESTEP == 0) and (PARi_next_hours > 0):
+            # Initialize scene from multiple mtgs
+            c_stand_scene_sky, c_stand_scene_sun, indexer = self._initialize_model_on_stand(batch=batch, 
+                                                                                            energy=1,
+                                                                                            diffuse_model=self.diffuse_model,
+                                                                                            azimuts=self.azimuts,
+                                                                                            zenits=self.zenits,
+                                                                                            DOY=DOY,
+                                                                                            hourTU=hour,
+                                                                                            latitude=self.latitude
+                                                                                            )
+            self.previous_indexer = indexer
+
+            # Run the model
+            # c_stand_scene_sky.debug = True
+            raw, aggregated_sky = c_stand_scene_sky.run(direct=True, infinite=True)
+
+            # Build expected outputs from raw outputs
+            
+            Erel = aggregated_sky['par']['Eabs']  #: Erel is the relative surfacic absorbed energy per organ
+            self.previous_Erel = Erel
+            PARa = {k: v * PARi for k, v in Erel.items()}
+
+            # Primitive scale
+            if self.prim_scale:
+                Erel_prim = raw['par']['Eabs']
+                self.previous_Erel_prim = Erel_prim
+                raw_Eabs_abs = {k: [Eabs * PARi for Eabs in raw['par']['Eabs'][k]] for k in raw['par']['Eabs']}
+                outputs.update({'Erel_prim': Erel_prim, 'PARa_prim': raw_Eabs_abs, 'area_prim': raw['par']['area']})
+            
+            outputs.update({'PARa': PARa, 'Erel': Erel})
+
+        # Estimate from previous step
+        else:
+            PARa_output = {k: v * PARi for k, v in self.previous_Erel.items()}
+            outputs.update({'PARa': PARa_output})
+
+            # Primitive scale
+            if self.prim_scale:
+                raw_Eabs_abs = {k: [Eabs * PARi for Eabs in v] for k, v in self.previous_Erel_prim.items()}
+                outputs.update({'PARa_prim': raw_Eabs_abs})
+
         
-        outputs.update({'PARa': PARa, 'Erel': Erel})
-
         t3 = time.time()
         if debug: print("caribu solve", t3-t2)
 
         # Send dedicated results to each mtg
         for id, _ in queues_light_to_plants.items():
             sent_results = {variable_name: {} for variable_name in outputs.keys()}
-            for unique_id, original_id in indexer[id].items():
+            for unique_id, original_id in self.previous_indexer[id].items():
                 for variable_name, values in outputs.items():
                     sent_results[variable_name][original_id] = values[unique_id]
             queues_light_to_plants[id].put(sent_results)
