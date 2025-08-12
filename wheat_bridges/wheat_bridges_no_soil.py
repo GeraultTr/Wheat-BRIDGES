@@ -1,3 +1,7 @@
+from multiprocessing.shared_memory import SharedMemory
+import numpy as np
+from openalea.metafspm.utils import ArrayDict
+import time
 
 # Edited models
 from root_bridges.root_CN import RootCNUnified
@@ -17,6 +21,8 @@ from openalea.fspm.utility.writer.visualize import plot_mtg
 from alinea.adel.adel import Adel
 from alinea.caribu.plantgl_adaptor import scene_to_cscene
 
+
+debug = False
 
 class WheatBRIDGES(CompositeModel):
     """
@@ -73,6 +79,9 @@ class WheatBRIDGES(CompositeModel):
                                                 translator_path=translator_path,
                                                 components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.shoot))
         
+        self.soil_handshake = {v: k for k, v in enumerate(self.plant_side_soil_inputs + self.soil_outputs)}
+        # print(len(self.soil_handshake))
+        
         # Specific here TODO remove later
         self.root_water.collar_children = self.root_growth.collar_children
         self.root_water.collar_skip = self.root_growth.collar_skip
@@ -97,8 +106,9 @@ class WheatBRIDGES(CompositeModel):
         # ROOT PROPERTIES INITIAL PASSING IN MTG
         self.root_props["plant_id"] = name
         self.root_props["model_name"] = self.__class__.__name__
-        self.root_props["carried_components"] = [component.__class__.__name__ for component in self.components]
-        self.queue_plants_to_soil.put({"plant_id": self.name, "data": self.root_props})
+        self.model_name = self.__class__.__name__
+        self.carried_components = [component.__class__.__name__ for component in self.components]
+        self.queue_plants_to_soil.put({"plant_id": self.name, "model_name": self.model_name, "carried_components": self.carried_components, "handshake": self.soil_handshake})
 
         # SHOOT ARCHITECTURE INITIAL PASSING
         # NOTE : Here we pass the tesselated scene since otherwise plantgl rotated geometries are not pickable
@@ -153,11 +163,23 @@ class WheatBRIDGES(CompositeModel):
         light_boundary_props = self.queues_light_to_plants[self.name].get()
 
         # NOTE : here you have to perform a per-variable update otherwise dynamic links are broken
-        for variable_name in self.soil_outputs + ["voxel_neighbor"]: # TODO : soil_outputs come from declare_data_and_couple_components, not a good structure to keep
+        shm = SharedMemory(name=self.name)
+        buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
+        vertices_mask = buf[self.soil_handshake["vertex_index"]] >= 1
+        print(buf[self.soil_handshake["vertex_index"]])
+        print(vertices_mask)
+        for variable_name in self.soil_outputs: # TODO : soil_outputs come from declare_data_and_couple_components, not a good structure to keep
+            print(len(self.root_props[variable_name]))
             if variable_name not in self.root_props.keys():
-                self.root_props[variable_name] = {}
+                self.root_props[variable_name] = ArrayDict()
             
-            self.root_props[variable_name].update(soil_boundary_props[variable_name])
+            buffer_out = buf[self.soil_handshake[variable_name]]
+            buffer_out_masked = buffer_out[vertices_mask]
+            print(buffer_out.shape)
+            print(buffer_out_masked.shape)
+            self.root_props[variable_name].assign_all(buf[self.soil_handshake[variable_name]][vertices_mask])
+            
+        shm.close()
 
         for variable_name in light_boundary_props.keys():
             if variable_name not in self.shoot_props.keys():
@@ -166,7 +188,21 @@ class WheatBRIDGES(CompositeModel):
 
 
     def send_plant_status_to_environment(self):
-        self.queue_plants_to_soil.put({"plant_id": self.name, "data": self.root_props})
+        # props_to_soil = {k: self.root_props[k] if k in self.root_props else {} for k in self.plant_side_soil_inputs}
+
+        shm = SharedMemory(name=self.name)
+        buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
+        # print(buf)
+        for name in self.plant_side_soil_inputs:
+            value = self.root_props[name]
+            if isinstance(value, ArrayDict):
+                buf[self.soil_handshake[name],:len(value)] = value.values_array()
+            else:
+                print(name, "should be passed")
+        
+        shm.close()
+
+        self.queue_plants_to_soil.put({"plant_id": self.name, "model_name": self.model_name, "handshake": self.soil_handshake})
 
         # Get scene from Adel and then convert it to triangles as it is pickable
         scene = Adel.scene(self.g_shoot)

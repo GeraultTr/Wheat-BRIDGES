@@ -5,7 +5,7 @@ from alinea.caribu.sky_tools import GenSky, GetLight, Gensun, GetLightsSun, spit
 import time
 import math
 
-debug = False
+debug = True
 
 class LightModel:
 
@@ -202,7 +202,7 @@ class LightModel:
         c_stand_scene_sky = CaribuScene(scene=triangle_scene, light=sky, pattern=(0, 0, self.scene_xrange, self.scene_yrange), opt=opt)
         c_stand_scene_sun = CaribuScene(scene=triangle_scene, light=sun, pattern=(0, 0, self.scene_xrange, self.scene_yrange), opt=opt)
 
-        plantgl_scene = True
+        plantgl_scene = False
         if plantgl_scene:
             from alinea.caribu.display import generate_scene
             pgl_scene = generate_scene(triangle_scene)
