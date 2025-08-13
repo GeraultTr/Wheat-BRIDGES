@@ -17,6 +17,7 @@ from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel
 from openalea.metafspm.component_factory import Choregrapher
+from openalea.metafspm.utils import mtg_to_arraydict
 from openalea.fspm.utility.writer.visualize import plot_mtg
 from alinea.adel.adel import Adel
 from alinea.caribu.plantgl_adaptor import scene_to_cscene
@@ -73,14 +74,23 @@ class WheatBRIDGES(CompositeModel):
         self.shoot = WheatFSPM(root_mtg=self.g_root, computing_light_interception=False, **scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False,
                                                                         update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
+
+        components = (self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.shoot)
+        descriptors = []
+        for c in components:
+            descriptors += c.descriptor
+        descriptors.remove("vertex_index")
+
+        # NOTE : Important that this type conversion occurs after initiation of the modules
+        mtg_to_arraydict(self.g_root, ignore=descriptors)
         
         # LINKING MODULES
         self.declare_data_and_couple_components(root=self.g_root, shoot=self.g_shoot,
                                                 translator_path=translator_path,
-                                                components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.shoot))
+                                                components=components)
         
         self.soil_handshake = {v: k for k, v in enumerate(self.plant_side_soil_inputs + self.soil_outputs)}
-        # print(len(self.soil_handshake))
+        # print(self.soil_handshake)
         
         # Specific here TODO remove later
         self.root_water.collar_children = self.root_growth.collar_children
@@ -108,6 +118,18 @@ class WheatBRIDGES(CompositeModel):
         self.root_props["model_name"] = self.__class__.__name__
         self.model_name = self.__class__.__name__
         self.carried_components = [component.__class__.__name__ for component in self.components]
+
+        shm = SharedMemory(name=self.name)
+        buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
+        # print(buf)
+        for name in self.plant_side_soil_inputs:
+            value = self.root_props[name]
+            if isinstance(value, ArrayDict):
+                buf[self.soil_handshake[name],:len(value)] = value.values_array()
+            else:
+                print(name, "should be passed")
+        
+        shm.close()
         self.queue_plants_to_soil.put({"plant_id": self.name, "model_name": self.model_name, "carried_components": self.carried_components, "handshake": self.soil_handshake})
 
         # SHOOT ARCHITECTURE INITIAL PASSING
@@ -165,19 +187,16 @@ class WheatBRIDGES(CompositeModel):
         # NOTE : here you have to perform a per-variable update otherwise dynamic links are broken
         shm = SharedMemory(name=self.name)
         buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
-        vertices_mask = buf[self.soil_handshake["vertex_index"]] >= 1
-        print(buf[self.soil_handshake["vertex_index"]])
-        print(vertices_mask)
+        vertices = buf[self.soil_handshake["vertex_index"]]
+        vertices_mask = vertices >= 1
         for variable_name in self.soil_outputs: # TODO : soil_outputs come from declare_data_and_couple_components, not a good structure to keep
-            print(len(self.root_props[variable_name]))
-            if variable_name not in self.root_props.keys():
+            # print(len(self.root_props[variable_name]))
+            if variable_name not in self.root_props.keys(): # Actually used? I am not sure
                 self.root_props[variable_name] = ArrayDict()
             
-            buffer_out = buf[self.soil_handshake[variable_name]]
-            buffer_out_masked = buffer_out[vertices_mask]
-            print(buffer_out.shape)
-            print(buffer_out_masked.shape)
-            self.root_props[variable_name].assign_all(buf[self.soil_handshake[variable_name]][vertices_mask])
+            # print(buf[self.soil_handshake[variable_name]][vertices_mask])
+            # self.root_props[variable_name].assign_all(buf[self.soil_handshake[variable_name]][vertices_mask])
+            self.root_props[variable_name].scatter(vertices[vertices_mask], buf[self.soil_handshake[variable_name]][vertices_mask])
             
         shm.close()
 
