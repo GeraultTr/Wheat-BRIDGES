@@ -10,7 +10,7 @@ if __name__ == '__main__':
     
     output_path = os.path.join("outputs", "recoupling")
 
-    for scenario_name in ["WB_ref2_250_tests"]:
+    for scenario_name in ["WB_ref2_250_oh3"]:
         subscenarios = [subsc for subsc in os.listdir(os.path.join(output_path, scenario_name)) if subsc not in ["Soil", "Delete_to_Stop"]]
         for subscenario in subscenarios:
             print("analysing", subscenario)

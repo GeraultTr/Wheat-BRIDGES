@@ -1,5 +1,6 @@
 import multiprocessing as mp
 import time
+import os
 
 # Model packages
 import wheat_bridges
@@ -18,7 +19,7 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref2"])
     # output_folder = "outputs"
     output_folder = "outputs/recoupling"
-    custom_suffix = "tests"
+    custom_suffix = "oh3"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]
@@ -60,7 +61,7 @@ if __name__ == "__main__":
                 p = mp.Process(target=play_Orchestra, kwargs=dict(scene_name=full_scenario_name, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                     soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
-                                    logger_class=Logger, log_settings=Logger.light_log,
+                                    logger_class=Logger, log_settings=Logger.light_log, heavy_log_period=24,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                     time_step=3600, n_iterations=50*24))
 
@@ -76,11 +77,11 @@ if __name__ == "__main__":
                 play_Orchestra(scene_name=full_scenario_name, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                     soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=wheat_bridges.__path__[0],
-                                    logger_class=Logger, log_settings=Logger.light_log,
+                                    logger_class=Logger, log_settings=Logger.light_log, heavy_log_period=24,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                     time_step=3600, n_iterations=2000, record_performance=True)
 
-                target_folder_key = "WheatBRIDGES_0"
+                target_folder_key = f"WheatBRIDGES_0_{full_scenario_name}"
 
                 analyze_data(scenarios=[full_scenario_name], outputs_dirpath=output_folder, target_folder_key=target_folder_key,
                                 inputs_dirpath="inputs",

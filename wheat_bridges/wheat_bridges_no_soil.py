@@ -1,6 +1,6 @@
 from multiprocessing.shared_memory import SharedMemory
 import numpy as np
-from openalea.metafspm.utils import ArrayDict
+from openalea.metafspm.utils import ArrayDict, mtg_to_arraydict
 import time
 
 # Edited models
@@ -17,7 +17,6 @@ from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel
 from openalea.metafspm.component_factory import Choregrapher
-from openalea.metafspm.utils import mtg_to_arraydict
 from openalea.fspm.utility.writer.visualize import plot_mtg
 from alinea.adel.adel import Adel
 from alinea.caribu.plantgl_adaptor import scene_to_cscene
@@ -68,6 +67,8 @@ class WheatBRIDGES(CompositeModel):
         else:
             self.root_growth = RootGrowthModelCoupled(g=None, time_step=time_step, **root_parameters)
         self.g_root = self.root_growth.g
+        # We have to update the coordinates of the new / imported MTG for other model's initialization
+        plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step, **root_parameters)
         self.root_cn = RootCNUnified(self.g_root, time_step, **root_parameters)
@@ -120,7 +121,7 @@ class WheatBRIDGES(CompositeModel):
         self.carried_components = [component.__class__.__name__ for component in self.components]
 
         shm = SharedMemory(name=self.name)
-        buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
+        buf = np.ndarray((35,20000), dtype=np.float64, buffer=shm.buf)
         # print(buf)
         for name in self.plant_side_soil_inputs:
             value = self.root_props[name]
@@ -186,7 +187,7 @@ class WheatBRIDGES(CompositeModel):
 
         # NOTE : here you have to perform a per-variable update otherwise dynamic links are broken
         shm = SharedMemory(name=self.name)
-        buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
+        buf = np.ndarray((35,20000), dtype=np.float64, buffer=shm.buf)
         vertices = buf[self.soil_handshake["vertex_index"]]
         vertices_mask = vertices >= 1
         for variable_name in self.soil_outputs: # TODO : soil_outputs come from declare_data_and_couple_components, not a good structure to keep
@@ -194,7 +195,6 @@ class WheatBRIDGES(CompositeModel):
             if variable_name not in self.root_props.keys(): # Actually used? I am not sure
                 self.root_props[variable_name] = ArrayDict()
             
-            # print(buf[self.soil_handshake[variable_name]][vertices_mask])
             # self.root_props[variable_name].assign_all(buf[self.soil_handshake[variable_name]][vertices_mask])
             self.root_props[variable_name].scatter(vertices[vertices_mask], buf[self.soil_handshake[variable_name]][vertices_mask])
             
@@ -207,10 +207,8 @@ class WheatBRIDGES(CompositeModel):
 
 
     def send_plant_status_to_environment(self):
-        # props_to_soil = {k: self.root_props[k] if k in self.root_props else {} for k in self.plant_side_soil_inputs}
-
         shm = SharedMemory(name=self.name)
-        buf = np.ndarray((35,10000), dtype=np.float64, buffer=shm.buf)
+        buf = np.ndarray((35,20000), dtype=np.float64, buffer=shm.buf)
         # print(buf)
         for name in self.plant_side_soil_inputs:
             value = self.root_props[name]
