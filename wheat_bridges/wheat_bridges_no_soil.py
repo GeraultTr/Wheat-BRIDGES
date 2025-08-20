@@ -80,7 +80,7 @@ class WheatBRIDGES(CompositeModel):
         descriptors = []
         for c in components:
             descriptors += c.descriptor
-        descriptors.remove("vertex_index")
+        # descriptors.remove("vertex_index")
 
         # NOTE : Important that this type conversion occurs after initiation of the modules
         mtg_to_arraydict(self.g_root, ignore=descriptors)

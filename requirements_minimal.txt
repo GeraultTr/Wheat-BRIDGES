@@ -26,6 +26,7 @@ dask
 bottleneck
 pandas==1.3.5
 numpy
+numba
 scipy
 matplotlib
 #scikit-learn

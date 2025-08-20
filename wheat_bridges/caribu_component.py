@@ -5,7 +5,7 @@ from alinea.caribu.sky_tools import GenSky, GetLight, Gensun, GetLightsSun, spit
 import time
 import math
 
-debug = True
+debug = False
 
 class LightModel:
 

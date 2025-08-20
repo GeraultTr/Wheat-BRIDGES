@@ -19,7 +19,7 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref2"])
     # output_folder = "outputs"
     output_folder = "outputs/recoupling"
-    custom_suffix = "oh3"
+    custom_suffix = "oh1"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]
