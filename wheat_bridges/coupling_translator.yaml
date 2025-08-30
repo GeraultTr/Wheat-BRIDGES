@@ -196,6 +196,8 @@ RootWaterModel:
   WheatFSPM:
     water_root_shoot_xylem:
       Total_Transpiration: 0.001 * 18.07 / 1000000
+    sucrose_input_rate:
+      Unloading_Sucrose: 0.000001 / (3600 * 12)
 
 
 

@@ -10,7 +10,7 @@ if __name__ == '__main__':
     
     output_path = os.path.join("outputs", "recoupling")
 
-    for scenario_name in ["WB_ref2_50_oh3"]:
+    for scenario_name in ["WB_ref2_50_oh2"]:
         subscenarios = [subsc for subsc in os.listdir(os.path.join(output_path, scenario_name)) if subsc not in ["Soil", "Delete_to_Stop"]]
         for subscenario in subscenarios:
             print("analysing", subscenario)
@@ -20,9 +20,9 @@ if __name__ == '__main__':
                             on_performance=True,
                             animate_raw_logs=False,
                             target_properties=None,
-                            on_shoot_logs=False)
+                            on_shoot_logs=True)
 
         analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key="Soil",
                                 inputs_dirpath="inputs",
                                 on_sums=True,
-                                on_soil_logs=True)
+                                on_soil_logs=False)

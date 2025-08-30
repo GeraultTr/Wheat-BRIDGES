@@ -151,6 +151,10 @@ class WheatBRIDGES(CompositeModel):
         # Send command to environments models to run first
         self.send_plant_status_to_environment()
 
+        # TP 
+        
+        self.root_props["parent_id"] = ArrayDict(self.root_props["parent_id"])
+
 
     def run(self):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
@@ -170,6 +174,8 @@ class WheatBRIDGES(CompositeModel):
         # Compute state variations for water and then carbon and nitrogen
         self.root_water()
         self.root_cn()
+
+        # print("inputs_to_shoot : ", self.root_props["total_sucrose_phloem"][1], self.root_props["total_living_struct_mass"][1], self.root_props["AA_root_to_shoot_xylem"][1], self.root_props["Nm_root_to_shoot_xylem"][1], self.root_props["total_cytokinins"][1])
 
         # Compute shoot flows and state balance for CN-wheat
         self.shoot()
