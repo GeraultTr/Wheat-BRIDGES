@@ -19,7 +19,7 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref2"])
     # output_folder = "outputs"
     output_folder = "outputs/recoupling"
-    custom_suffix = "oh4"
+    custom_suffix = "oh6"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]
@@ -85,7 +85,7 @@ if __name__ == "__main__":
                     subscenarios = [subsc for subsc in os.listdir(os.path.join(output_folder, full_scenario_name)) if subsc not in ["Soil", "Delete_to_Stop"]]
                     for subscenario in subscenarios:
                         print("analysing", subscenario)
-                        analyze_data(scenarios=[scenario_name], outputs_dirpath=output_folder, target_folder_key=subscenario,
+                        analyze_data(scenarios=[full_scenario_name], outputs_dirpath=output_folder, target_folder_key=subscenario,
                                         inputs_dirpath="inputs",
                                         on_sums=True,
                                         on_performance=True,
