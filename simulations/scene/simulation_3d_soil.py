@@ -4,7 +4,7 @@ import os
 
 # Model packages
 import wheat_bridges
-from openalea.rhizosoil.model import RhizoSoil
+from openalea.rhizosoil.model_coupled import RhizoSoil
 from wheat_bridges.wheat_bridges_no_soil import WheatBRIDGES
 from wheat_bridges.caribu_component import LightModel
 
@@ -16,10 +16,10 @@ from openalea.fspm.utility.plot import analyze_data
 
 
 if __name__ == "__main__":
-    scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_25-10-04.xlsx", which=["WB_ref"])
     # output_folder = "outputs"
     output_folder = "outputs/parametrization"
-    custom_suffix = "p3_heavy2"
+    custom_suffix = "p6_coupled_light_test"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]

@@ -19,7 +19,7 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref"])
     # output_folder = "outputs"
     output_folder = "outputs/parametrization"
-    custom_suffix = "p4_heavy"
+    custom_suffix = "p5_soil"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]
