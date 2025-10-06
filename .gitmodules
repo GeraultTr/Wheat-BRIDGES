@@ -1,7 +1,3 @@
-[submodule "Root_BRIDGES"]
-	path = Root_BRIDGES
-	url = git@github.com:GeraultTr/Root_BRIDGES.git
-	branch = main
 [submodule "WheatFspm"]
 	path = WheatFspm
 	url = git@github.com:GeraultTr/WheatFspm.git

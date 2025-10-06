@@ -1,0 +1,36 @@
+name: wheatbridges
+channels:
+  - openalea3
+  - conda-forge
+dependencies:
+  - python
+  - scipy
+  - numpy
+  - openalea.mtg
+  - openalea.deploy
+  - openalea.lpy
+  - alinea.caribu
+  - alinea.astk
+  # metafspm
+  - pyyaml
+  - numba
+  # fspm-utility
+  - openpyxl
+  - pandas
+  - salib
+  - xarray
+  - netcdf4
+  - dask
+  - pyvista
+  - imageio
+  - imageio-ffmpeg
+  - matplotlib
+  - brokenaxes
+  - pint
+  - trimesh
+  - openalea.plantgl
+  
+  # For RhizoSoil cmf
+  # let pip install the rest using pyproject.toml (if you are okay with conda/pip mix)
+  - pip:
+      - -e .."[doc]"
