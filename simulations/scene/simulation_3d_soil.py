@@ -19,7 +19,7 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-10-04.xlsx", which=["WB_ref"])
     # output_folder = "outputs"
     output_folder = "outputs/parametrization"
-    custom_suffix = "p8_coupled_light_test"
+    custom_suffix = "p8_coupled_light_smallvox"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]

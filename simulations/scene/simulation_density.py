@@ -19,7 +19,8 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref"])
     # output_folder = "outputs"
     output_folder = "outputs/parametrization"
-    custom_suffix = "p4_heavy"
+    custom_suffix = "r1_heavy"
+    # custom_suffix = "p5_heavy"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]
@@ -33,7 +34,6 @@ if __name__ == "__main__":
     max_processes = mp.cpu_count() - max(subprocesses_number) - parallel_development - 1 # -1 for the main process
 
     parallel = False
-    active_processes = 0 
     processes = []
 
     if parallel:
@@ -79,6 +79,7 @@ if __name__ == "__main__":
                                     translator_path=openalea.wheatbridges.__path__[0],
                                     logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=24,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
+                                    # time_step=3600, n_iterations=500, record_performance=True)
                                     time_step=3600, n_iterations=2500, record_performance=True)
 
                 if clean_exit:
