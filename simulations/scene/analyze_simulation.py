@@ -11,9 +11,11 @@ if __name__ == '__main__':
     # output_path = os.path.join("outputs", "recoupling")
     output_path = os.path.join("outputs", "parametrization")
 
-    for scenario_name in ["WB_ref_250_p4.2_heavy_short"]:
+    # for scenario_name in ["WB_ref_250_r2_heavy_careful"]:
+    for scenario_name in ["WB_ref_250_r6_test"]:
+    # for scenario_name in ["WB_ref_250_r3_heavy"]:
         # subscenarios = [subsc for subsc in os.listdir(os.path.join(output_path, scenario_name)) if subsc not in ["Soil", "Soil *", "Delete_to_Stop"]]
-        subscenarios = ["WheatBRIDGES_4_" + scenario_name]
+        subscenarios = ["WheatBRIDGES_0_" + scenario_name]
         for subscenario in subscenarios:
             print("analysing", subscenario)
             analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
@@ -22,7 +24,9 @@ if __name__ == '__main__':
                             on_performance=False,
                             animate_raw_logs=True,
                             target_properties=None,
-                            on_shoot_logs=False)
+                            on_shoot_logs=False,
+                            on_images=False)
+                
 
         do_soil=False
         if do_soil:
