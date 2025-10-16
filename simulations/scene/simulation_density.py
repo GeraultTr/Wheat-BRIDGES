@@ -19,7 +19,8 @@ if __name__ == "__main__":
     # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref"])
     # custom_suffix = "r12_ref_unbal"
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug"])
-    custom_suffix = "r19_debug_inter"
+    # custom_suffix = "r19_debug_inter"
+    custom_suffix = "r29_debug"
     output_folder = "outputs/parametrization"
     # densities = [50, 200, 400]
     # densities = [50, 400]
