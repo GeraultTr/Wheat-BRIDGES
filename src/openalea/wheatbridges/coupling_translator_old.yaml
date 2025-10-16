@@ -114,16 +114,10 @@ RootCNUnified:
       microbial_N: 1.0
 
   WheatFSPM:
-    # sucrose_input_rate:
-    #   Unloading_Sucrose: 0.000001 / (3600 * 12)
-    # AA_input_rate_phloem:
-    #   Unloading_Amino_Acids: 0.000001 / (3600 * 1.4)
-    mstruct_axis_shoot:
-      mstruct_axis: 1.0
-    sucrose_phloem_shoot:
-      sucrose_phloem: 0.000001 / 12
-    AA_phloem_shoot:
-      amino_acids_phloem: 0.000001 / 1.4
+    sucrose_input_rate:
+      Unloading_Sucrose: 0.000001 / (3600 * 12)
+    AA_input_rate_phloem:
+      Unloading_Amino_Acids: 0.000001 / (3600 * 1.4)
     cytokinins_root_shoot_xylem:
       Export_cytokinins: 1.0
 
@@ -178,8 +172,6 @@ RootWaterModel:
       C_solutes_xylem: 1.0
     C_solutes_phloem:
       C_solutes_phloem: 1.0
-    sucrose_input_rate:
-      sucrose_root_to_shoot_phloem: -1.0
 
   RootGrowthModelCoupled:
     length:
@@ -204,8 +196,8 @@ RootWaterModel:
   WheatFSPM:
     water_root_shoot_xylem:
       Total_Transpiration: 0.001 * 18.07 / 1000000
-    # sucrose_input_rate:
-    #   Unloading_Sucrose: 0.000001 / (3600 * 12)
+    sucrose_input_rate:
+      Unloading_Sucrose: 0.000001 / (3600 * 12)
 
 
 
@@ -273,10 +265,6 @@ WheatFSPM:
       AA_root_to_shoot_xylem: 1.4 * 1000000 * 3600
     Export_Nitrates:
       Nm_root_to_shoot_xylem: 1000000 * 3600
-    Unloading_Amino_Acids_phloem:
-      AA_root_to_shoot_phloem: -1.4 * 1000000 * 3600
-    Unloading_Sucrose_phloem:
-      sucrose_root_to_shoot_phloem: -12 * 1000000 * 3600
     cytokinins:
       total_cytokinins: 1.0
 

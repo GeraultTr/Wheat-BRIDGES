@@ -12,6 +12,7 @@ from openalea.rootcynaps import RootWaterModel
 
 # Shoot Model
 from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
+from openalea.wheatbridges import cn_wheat_collar
 
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel

@@ -13,6 +13,7 @@ class Collar:
         :return: Rate of Sucrose Unloading (µmol` C.h-1)
         :rtype: float
         """
+        # print("possible concentration", 1e-6 * sucrose_phloem / ((mstruct_axis - self.mstruct)*1e-4) / 12)
         conc_sucrose_phloem_roots = max(0, sucrose_roots / (self.mstruct * self.__class__.PARAMETERS.ALPHA))
         conc_sucrose_phloem_shoot = max(0, sucrose_phloem / ((mstruct_axis - self.mstruct) * parameters.AXIS_PARAMETERS.ALPHA))
         # This initialization situation is accounted for to avoid unlogical depleating when one of the models is initialized too low
@@ -25,20 +26,8 @@ class Collar:
         conductance = parameters.ROOTS_PARAMETERS.SIGMA_SUCROSE * parameters.ROOTS_PARAMETERS.BETA * self.mstruct ** (2 / 3) * T_effect_conductivity
         flow_value = driving_sucrose_compartment * diff_sucrose * conductance * parameters.SECOND_TO_HOUR_RATE_CONVERSION
 
-        # minimal_phloem_concentration = 0 # mol.g-1
-        # if flow_value > 0.:
-        #     if (sucrose_phloem - flow_value) / (mstruct_axis - self.mstruct) < minimal_phloem_concentration:
-        #         flow_value = 0.
-        #         print("WARNING blocked root phloem unloading")
-        
-        # else:
-        #     if (sucrose_roots + flow_value) / self.mstruct < minimal_phloem_concentration:
-        #         flow_value = 0.
-        #         print("WARNING blocked shoot phloem unloading")
-
-        #print(conc_sucrose_phloem_shoot, conc_sucrose_phloem_roots, flow_value)
-
         return flow_value
+
 
     def calculate_Unloading_Sucrose_homogeneous(self, sucrose_roots, sucrose_phloem, mstruct_axis, T_effect_conductivity):
         """
