@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     # for scenario_name in ["WB_debug_250_r15_debug_unbal"]:
     # for scenario_name in ["WB_debug_250_r16_debug_unbal"]:
-    for scenario_name in ["WB_debug2_250_r53_debug"]:
+    for scenario_name in ["WB_debug2_250_r68_debug"]:
     # for scenario_name in ["WB_debug2_250_r43_debug"]:
     # for scenario_name in ["WB_ref_250_r12_ref_unbal"]:
     # for scenario_name in ["WB_ref_250_r12_ref_unbal", "WB_debug_250_r15_debug_unbal"]:
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         subscenarios = ["WheatBRIDGES_0_" + scenario_name]
         for subscenario in subscenarios:
             print("analysing", subscenario)
-            if True:
+            if False:
                 analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                 inputs_dirpath="inputs",
                                 on_sums=True,
@@ -31,7 +31,7 @@ if __name__ == '__main__':
                                 target_properties=None,
                                 on_shoot_logs=False,
                                 on_images=False)
-            if True:
+            if False:
                 try:
                     analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                     inputs_dirpath="inputs",

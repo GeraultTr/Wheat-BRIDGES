@@ -7,11 +7,11 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_ref_71
+#$ -N wb_analysis
 
 # Nom de la queue
-# -q short.q
-#$ -q long.q
+#$ -q short.q
+# -q long.q
 # -q highmem.q
 
 # Sélection d'un noeud particulier (commented)
@@ -31,10 +31,10 @@
 #$ -cwd
 
 # Utiliser n CPUs
-#$ -pe thread 10
+#$ -pe thread 6
 
 # Python
 
 conda activate wheat-bridges
-python -m simulation_density
+python -m analyze_simulation
 conda deactivate
