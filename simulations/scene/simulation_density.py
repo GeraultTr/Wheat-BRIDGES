@@ -1,6 +1,7 @@
 import multiprocessing as mp
 import time
 import os
+import pickle
 
 # Model packages
 import openalea.wheatbridges
@@ -19,9 +20,10 @@ if __name__ == "__main__":
     # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref"])
     # custom_suffix = "r12_ref_unbal"
     # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug"])
-    scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug2"])
+    # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug2"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug3"])
     # custom_suffix = "r19_debug_inter"
-    custom_suffix = "r71_debug"
+    custom_suffix = "r78_debug"
     output_folder = "outputs/parametrization"
     # densities = [50, 200, 400]
     # densities = [50, 400]
@@ -79,10 +81,14 @@ if __name__ == "__main__":
                 clean_exit = play_Orchestra(scene_name=full_scenario_name, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                     soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=openalea.wheatbridges.__path__[0],
-                                    logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=1000,
+                                    logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=6,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                     # time_step=3600, n_iterations=500, record_performance=True)
-                                    time_step=3600, n_iterations=2500, record_performance=True)
+                                    time_step=3600, n_iterations=2500, record_performance=True, log_only_one=True)
+                
+                # In any situation, save the inputs in the output folder
+                with open(os.path.join(output_folder, full_scenario_name, "input_scenario.pckl"), "wb") as f:
+                    pickle.dump(scenario, f)
 
                 if clean_exit:
                     subscenarios = [subsc for subsc in os.listdir(os.path.join(output_folder, full_scenario_name)) if subsc not in ["Soil", "Delete_to_Stop"]]

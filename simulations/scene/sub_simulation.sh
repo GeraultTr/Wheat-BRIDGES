@@ -7,11 +7,11 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_ref_71
+#$ -N wb_ref_78
 
 # Nom de la queue
-# -q short.q
-#$ -q long.q
+#$ -q short.q
+# -q long.q
 # -q highmem.q
 
 # Sélection d'un noeud particulier (commented)
