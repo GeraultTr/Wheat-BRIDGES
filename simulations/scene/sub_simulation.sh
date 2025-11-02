@@ -7,7 +7,7 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_ref_78
+#$ -N wb_kd3
 
 # Nom de la queue
 #$ -q short.q
