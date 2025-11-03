@@ -7,7 +7,7 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_kd3
+#$ -N wb_krfvx6gb
 
 # Nom de la queue
 #$ -q short.q

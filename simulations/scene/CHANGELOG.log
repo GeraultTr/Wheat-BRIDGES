@@ -1,0 +1,6 @@
+25/11/01: reparametrization and debug of Wheat-BRIDGES X CN-Wheat comparision. 
+1) Increased the axial diffusivity parameter to 1e-7 in the phloem transport model to avoid unrealistic gradients and concentrations in phloem. 
+2) Seeing it was not the only responsible for hexose accumulation in non-growing zones, the active loading to phloem was reactivated, with Vmax x 100 because Km was replasticized and increased from 5e-6 to 1e-2
+3) Since it enabled more allocation to apices, the artificial unloading to growth zones was a little bit relaxed, but model is still very sensitive so the reference rates where only multiplied by two.
+4) Shoot development was limited by N restrictions, so export to xylem was increased with various vmax levels tested, but also made more plastic with a Km increase
+All are summarized in scenario WB_debug5 in simulations/scene

@@ -14,7 +14,8 @@ if __name__ == '__main__':
     # for scenario_name in ["WB_debug_250_r15_debug_unbal"]:
     # for scenario_name in ["WB_debug_250_r16_debug_unbal"]:
     # for scenario_name in ["WB_debug2_250_r72_debug"]:
-    for scenario_name in ["WB_debug4_250_x3"]:
+    # for scenario_name in ["WB_debug5_250_kx3rfx2"]:
+    for scenario_name in ["WB_debug5_250_krfvx6"]:
     # for scenario_name in ["WB_debug2_250_r43_debug"]:
     # for scenario_name in ["WB_ref_250_r12_ref_unbal"]:
     # for scenario_name in ["WB_ref_250_r12_ref_unbal", "WB_debug_250_r15_debug_unbal"]:
@@ -38,7 +39,7 @@ if __name__ == '__main__':
                 finally:    
                     print("Finished shoot")
 
-            if False:
+            if True:
                 analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                 inputs_dirpath="inputs",
                                 animate_raw_logs=True)
