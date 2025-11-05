@@ -10,12 +10,13 @@
 #$ -N wb_analysis
 
 # Nom de la queue
-#$ -q short.q
+# -q short.q
 # -q long.q
 # -q highmem.q
+#$ -q bigmem.q
 
 # Sélection d'un noeud particulier (commented)
-# -l hostname=n12
+# -l hostname=n9
 
 # Sortie standard (already handled by python)
 #$ -o /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/output.out

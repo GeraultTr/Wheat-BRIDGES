@@ -44,7 +44,7 @@ if __name__ == '__main__':
                                 inputs_dirpath="inputs",
                                 animate_raw_logs=True)
                 
-            if True:
+            if False:
                 analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                 inputs_dirpath="inputs",
                                 on_mtg=True)

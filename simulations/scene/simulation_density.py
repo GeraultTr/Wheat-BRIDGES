@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug2"])
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-11-01.xlsx", which=["WB_debug6"])
     # custom_suffix = "r19_debug_inter"
-    custom_suffix = "krfvx6gb"
+    custom_suffix = "krfvx6_2"
     output_folder = "outputs/parametrization"
     # densities = [50, 200, 400]
     # densities = [50, 400]
