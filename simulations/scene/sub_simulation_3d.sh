@@ -7,7 +7,7 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_defense1
+#$ -N wb_defense_3d
 
 # Nom de la queue
 #$ -q short.q
@@ -36,5 +36,5 @@
 # Python
 
 conda activate wheat-bridges
-python -m simulation_density
+python -m simulation_3d_soil
 conda deactivate
