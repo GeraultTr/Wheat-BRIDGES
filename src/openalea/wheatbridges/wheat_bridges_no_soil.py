@@ -151,8 +151,7 @@ class WheatBRIDGES(CompositeModel):
         # Send command to environments models to run first
         self.send_plant_status_to_environment()
 
-        # TP 
-        
+        # TP
         self.root_props["parent_id"] = ArrayDict(self.root_props["parent_id"])
 
 
