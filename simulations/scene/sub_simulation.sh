@@ -7,7 +7,7 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_defense1
+#$ -N wb_defense
 
 # Nom de la queue
 #$ -q short.q

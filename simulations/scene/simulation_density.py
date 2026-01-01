@@ -19,7 +19,7 @@ from openalea.fspm.utility.plot import analyze_data
 if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-11-01.xlsx", which=["WB_defense1"])
     # custom_suffix = "r19_debug_inter"
-    custom_suffix = "diff_phloem"
+    custom_suffix = "def2.2"
     output_folder = "outputs/parametrization"
     # densities = [50, 200, 400]
     # densities = [50, 400]

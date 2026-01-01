@@ -83,6 +83,7 @@ class WheatBRIDGES(CompositeModel):
         # descriptors.remove("vertex_index")
 
         # NOTE : Important that this type conversion occurs after initiation of the modules
+        # AND BEFORE THE COUPLING FOR ALIASES TO REMAIN UNBROKEN!
         mtg_to_arraydict(self.g_root, ignore=descriptors)
         
         # LINKING MODULES
