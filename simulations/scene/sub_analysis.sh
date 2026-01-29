@@ -10,8 +10,8 @@
 #$ -N wb_analysis
 
 # Nom de la queue
-#$ -q short.q
-# -q long.q
+# -q short.q
+#$ -q long.q
 # -q highmem.q
 # -q bigmem.q
 

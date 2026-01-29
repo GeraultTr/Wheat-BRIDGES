@@ -20,7 +20,7 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-11-01.xlsx", which=["WB_def_soil_1"])
     # output_folder = "outputs"
     output_folder = "outputs/parametrization"
-    custom_suffix = "test"
+    custom_suffix = "3d_2.3"
     # densities = [50, 200, 400]
     # densities = [50, 400]
     densities = [250]
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                     pickle.dump(scenario, f)
 
                 if clean_exit:
-                    subscenarios = [subsc for subsc in os.listdir(os.path.join(output_folder, full_scenario_name)) if subsc not in ["Soil", "Delete_to_Stop"]]
+                    subscenarios = [subsc for subsc in os.listdir(os.path.join(output_folder, full_scenario_name)) if subsc not in ["Soil", "Delete_to_Stop", "input_scenario.pckl"]]
                     for subscenario in subscenarios:
                         print("analysing", subscenario)
                         analyze_data(scenarios=[full_scenario_name], outputs_dirpath=output_folder, target_folder_key=subscenario,

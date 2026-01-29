@@ -90,6 +90,7 @@ git clone -b develop_tristan git@github.com:openalea/rhizodep.git
 git clone -b main git@github.com:GeraultTr/RhizoSoil.git
 git clone -b munch git@github.com:GeraultTr/Root_BRIDGES.git
 git clone --recurse-submodules -b main git@github.com:GeraultTr/Wheat-BRIDGES.git
+git clone -b main git@github.com:GeraultTr/soiltemp.git
 
 cd Wheat-BRIDGES
 mamba create -n wheat-bridges -f ./conda/environment.yaml -y
@@ -122,6 +123,10 @@ pip install -e .
 cd ..
 
 cd Root_BRIDGES
+pip install -e .
+cd ..
+
+cd soiltemp
 pip install -e .
 cd ..
 
