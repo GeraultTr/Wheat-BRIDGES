@@ -7,11 +7,11 @@ from openalea.rootbridges import SoilModel
 
 # Untouched models
 from openalea.rhizodep import RootAnatomy
-from openalea.root_cynaps import RootWaterModel
+from openalea.rootcynaps import RootWaterModel
 
 # Shoot Model
-from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
-import wheat_bridges.cn_wheat_collar
+from openalea.fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
+from openalea.wheatbridges import cn_wheat_collar
 
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel
@@ -66,7 +66,7 @@ class WheatBRIDGES(CompositeModel):
 
         # LINKING MODULES
         self.declare_data_and_couple_components(root=self.g_root, shoot=self.g_shoot, soil=self.soil_voxels,
-                                                translator_path=wheat_bridges.__path__[0],
+                                                translator_path=openalea.wheat_bridges.__path__[0],
                                                 components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot))
         
         # Specific here TODO remove later

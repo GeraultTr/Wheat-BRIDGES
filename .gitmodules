@@ -1,4 +1,0 @@
-[submodule "WheatFspm"]
-	path = WheatFspm
-	url = git@github.com:GeraultTr/WheatFspm.git
-	branch = master
