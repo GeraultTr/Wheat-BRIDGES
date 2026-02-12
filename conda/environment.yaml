@@ -2,36 +2,41 @@ name: wheat-bridges
 channels:
   - openalea3
   - conda-forge
+channel_priority: strict
 dependencies:
+  # Scientific
   - python
   - pip
   - scipy
   - numpy
-  - openalea.mtg
-  - openalea.deploy
-  - openalea.lpy
-  - openalea.caribu
-  - openalea.astk
-  # - alinea.caribu
-  # - alinea.astk
-  # metafspm
   - pyyaml
   - numba
-  # fspm-utility
   - openpyxl
   - pandas
   - salib
   - xarray
   - netcdf4
   - dask
+  - pint
+  - trimesh
+  
+  # Openalea
+  - openalea.mtg
+  - openalea.deploy
+  - openalea.lpy
+  - openalea.caribu
+  - openalea.astk
+  - openalea.plantgl
+  # - alinea.caribu
+  # - alinea.astk
+
+  # Visuals
   - pyvista
   - imageio
   - imageio-ffmpeg
   - matplotlib
   - brokenaxes
-  - pint
-  - trimesh
-  - openalea.plantgl
+  - "vtk>=9.2=*omesa*"
   
   # For RhizoSoil cmf
   # let pip install the rest using pyproject.toml (if you are okay with conda/pip mix)
