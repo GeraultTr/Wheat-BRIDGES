@@ -4,6 +4,7 @@ channels:
   - conda-forge
 dependencies:
   - python
+  - pip
   - scipy
   - numpy
   - openalea.mtg
