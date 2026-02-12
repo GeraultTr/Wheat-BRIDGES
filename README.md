@@ -90,7 +90,8 @@ git clone -b develop_tristan git@github.com:openalea/rhizodep.git
 git clone -b main git@github.com:GeraultTr/RhizoSoil.git
 git clone -b munch git@github.com:GeraultTr/Root_BRIDGES.git
 git clone -b main git@github.com:GeraultTr/Wheat-BRIDGES.git
-# TODO : add Adel
+git clone -b wheat-bridges git@github.com:openalea/WheatFspm.git
+git clone -b master git@github.com:GeraultTr/adel.git
 git clone -b main git@github.com:GeraultTr/soiltemp.git
 
 cd Wheat-BRIDGES
@@ -140,7 +141,7 @@ sudo apt install -y libgl1-mesa-glx xvfb
 ```
 
 
-#### Requirements installed by Root-CyNAPS
+#### Requirements installed by Wheat-BRIDGES # TODO: update
 
 > -   openalea.mtg
 > -   openalea.plantgl

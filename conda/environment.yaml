@@ -1,4 +1,4 @@
-name: wheatbridges
+name: wheat-bridges
 channels:
   - openalea3
   - conda-forge
@@ -9,8 +9,10 @@ dependencies:
   - openalea.mtg
   - openalea.deploy
   - openalea.lpy
-  - alinea.caribu
-  - alinea.astk
+  - openalea.caribu
+  - openalea.astk
+  # - alinea.caribu
+  # - alinea.astk
   # metafspm
   - pyyaml
   - numba
