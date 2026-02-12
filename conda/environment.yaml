@@ -36,7 +36,7 @@ dependencies:
   - imageio-ffmpeg
   - matplotlib
   - brokenaxes
-  - "vtk>=9.2=*omesa*"
+  - "vtk>=9.2=*osmesa*"
   
   # For RhizoSoil cmf
   # let pip install the rest using pyproject.toml (if you are okay with conda/pip mix)
