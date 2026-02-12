@@ -89,7 +89,7 @@ git clone -b release2025 git@github.com:openalea/fspm-utility.git
 git clone -b develop_tristan git@github.com:openalea/rhizodep.git
 git clone -b main git@github.com:GeraultTr/RhizoSoil.git
 git clone -b munch git@github.com:GeraultTr/Root_BRIDGES.git
-git clone -b main git@github.com:GeraultTr/Wheat-BRIDGES.git
+git clone -b develop git@github.com:GeraultTr/Wheat-BRIDGES.git
 git clone -b wheat-bridges git@github.com:openalea/WheatFspm.git
 git clone -b master git@github.com:GeraultTr/adel.git
 git clone -b main git@github.com:GeraultTr/soiltemp.git
