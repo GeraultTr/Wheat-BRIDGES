@@ -95,7 +95,7 @@ git clone -b master git@github.com:GeraultTr/adel.git
 git clone -b main git@github.com:GeraultTr/soiltemp.git
 
 cd Wheat-BRIDGES
-mamba create -n wheat-bridges -f ./conda/environment.yaml -y
+mamba -vvv create -n wheat-bridges -f ./conda/environment.yaml -y
 mamba activate wheat-bridges
 pip install -e .
 cd ..
