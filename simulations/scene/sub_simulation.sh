@@ -34,7 +34,6 @@
 #$ -pe thread 10
 
 # Python
-
 conda activate wheat-bridges
 python -m simulation_density
 conda deactivate

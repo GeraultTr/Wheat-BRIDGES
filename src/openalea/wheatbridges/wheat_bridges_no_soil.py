@@ -18,8 +18,8 @@ from openalea.wheatbridges import cn_wheat_collar
 from openalea.metafspm.composite_wrapper import CompositeModel
 from openalea.metafspm.component_factory import Choregrapher
 from openalea.fspm.utility.writer.visualize import plot_mtg
-from alinea.adel.adel import Adel
-from alinea.caribu.plantgl_adaptor import scene_to_cscene
+from openalea.adel.adel import Adel
+from openalea.caribu.plantgl_adaptor import scene_to_cscene
 
 
 debug = False
