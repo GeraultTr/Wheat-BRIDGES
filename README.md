@@ -135,11 +135,6 @@ cd ..
 echo Installation finished
 ```
 
-For linux users only, an additional installation is necessary to render 3D outputs off-screen. It is installed with:
-```
-sudo apt install -y libgl1-mesa-glx xvfb
-```
-
 
 #### Requirements installed by Wheat-BRIDGES # TODO: update
 
