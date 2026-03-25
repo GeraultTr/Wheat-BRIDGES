@@ -27,8 +27,7 @@ dependencies:
   - openalea.caribu
   - openalea.astk
   - openalea.plantgl
-  # - alinea.caribu
-  # - alinea.astk
+  - openalea.adel
 
   # Visuals
   - pyvista
@@ -36,7 +35,8 @@ dependencies:
   - imageio-ffmpeg
   - matplotlib
   - brokenaxes
-  - "vtk>=9.2=*osmesa*"
+  - mesalib<25.1
+  - "vtk>=9.3.1=*osmesa*"
   
   # For RhizoSoil cmf
   # let pip install the rest using pyproject.toml (if you are okay with conda/pip mix)
