@@ -11,15 +11,15 @@ from openalea.rootcynaps import RootAnatomy
 from openalea.rootcynaps import RootWaterModel
 
 # Shoot Model
-from fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
+from openalea.fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
 from openalea.wheatbridges import cn_wheat_collar
 
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel
 from openalea.metafspm.component_factory import Choregrapher
 from openalea.fspm.utility.writer.visualize import plot_mtg
-from alinea.adel.adel import Adel
-from alinea.caribu.plantgl_adaptor import scene_to_cscene
+from openalea.adel.adel import Adel
+from openalea.caribu.plantgl_adaptor import scene_to_cscene
 
 
 debug = False
@@ -83,6 +83,7 @@ class WheatBRIDGES(CompositeModel):
         # descriptors.remove("vertex_index")
 
         # NOTE : Important that this type conversion occurs after initiation of the modules
+        # AND BEFORE THE COUPLING FOR ALIASES TO REMAIN UNBROKEN!
         mtg_to_arraydict(self.g_root, ignore=descriptors)
         
         # LINKING MODULES
@@ -151,8 +152,7 @@ class WheatBRIDGES(CompositeModel):
         # Send command to environments models to run first
         self.send_plant_status_to_environment()
 
-        # TP 
-        
+        # TP
         self.root_props["parent_id"] = ArrayDict(self.root_props["parent_id"])
 
 

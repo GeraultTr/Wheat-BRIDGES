@@ -7,7 +7,7 @@
 #$ -S /bin/bash
 
 # Nom du job
-#$ -N wb_defense
+#$ -N wb_3ds
 
 # Nom de la queue
 #$ -q short.q
@@ -18,10 +18,10 @@
 # -l hostname=n12
 
 # Sortie standard (already handled by python)
-#$ -o /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/output.out
+#$ -o /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/output2.out
 
 # Sortie d�erreur (already handled by python)
-#$ -e /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/errors.err
+#$ -e /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/errors2.err
 
 # Mail
 #$ -m ea
@@ -34,6 +34,7 @@
 #$ -pe thread 10
 
 # Python
+
 conda activate wheat-bridges
-python -m simulation_density
+python -m simulation_3d_soil
 conda deactivate

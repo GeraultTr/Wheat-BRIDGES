@@ -66,8 +66,8 @@ dependencies = [
     "openalea.mtg",
     "openalea.deploy",
     "openalea.lpy",
-    "alinea.caribu",
-    "alinea.astk",
+    "openalea.caribu",
+    "openalea.astk",
     # metafspm
     "pyyaml",
     "numba",

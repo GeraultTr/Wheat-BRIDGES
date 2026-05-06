@@ -19,10 +19,10 @@
 # -l hostname=n9
 
 # Sortie standard (already handled by python)
-#$ -o /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/output.out
+#$ -o /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/output2.out
 
 # Sortie d�erreur (already handled by python)
-#$ -e /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/errors.err
+#$ -e /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/errors2.err
 
 # Mail
 #$ -m ea

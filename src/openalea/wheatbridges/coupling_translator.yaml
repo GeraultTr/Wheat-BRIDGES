@@ -114,10 +114,6 @@ RootCNUnified:
       microbial_N: 1.0
 
   WheatFSPM:
-    # sucrose_input_rate:
-    #   Unloading_Sucrose: 0.000001 / (3600 * 12)
-    # AA_input_rate_phloem:
-    #   Unloading_Amino_Acids: 0.000001 / (3600 * 1.4)
     mstruct_axis_shoot:
       mstruct_axis: 1.0
     sucrose_phloem_shoot:
@@ -178,8 +174,8 @@ RootWaterModel:
       C_solutes_xylem: 1.0
     C_solutes_phloem:
       C_solutes_phloem: 1.0
-    sucrose_input_rate:
-      sucrose_root_to_shoot_phloem: -1.0
+    sucrose_root_to_shoot_phloem:
+      sucrose_root_to_shoot_phloem: 1.0
 
   RootGrowthModelCoupled:
     length:
@@ -204,9 +200,6 @@ RootWaterModel:
   WheatFSPM:
     water_root_shoot_xylem:
       Total_Transpiration: 0.001 * 18.07 / 1000000
-    # sucrose_input_rate:
-    #   Unloading_Sucrose: 0.000001 / (3600 * 12)
-
 
 
 SoilModel:

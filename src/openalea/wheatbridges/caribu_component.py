@@ -1,7 +1,7 @@
 
 # Utilities
-from alinea.caribu.CaribuScene import CaribuScene
-from alinea.caribu.sky_tools import GenSky, GetLight, Gensun, GetLightsSun, spitters_horaire
+from openalea.caribu.CaribuScene import CaribuScene
+from openalea.caribu.sky_tools import GenSky, GetLight, Gensun, GetLightsSun, spitters_horaire
 import time
 import math
 
@@ -204,7 +204,7 @@ class LightModel:
 
         plantgl_scene = False
         if plantgl_scene:
-            from alinea.caribu.display import generate_scene
+            from openalea.caribu.display import generate_scene
             pgl_scene = generate_scene(triangle_scene)
             pgl_scene.save("outputs/recoupling/test.bgeom")
         

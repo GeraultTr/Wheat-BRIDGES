@@ -1,4 +1,4 @@
-from cnwheat import model, parameters
+from openalea.cnwheat import model, parameters
 
 
 class Collar:

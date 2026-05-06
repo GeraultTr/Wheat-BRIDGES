@@ -11,25 +11,20 @@ if __name__ == '__main__':
     # output_path = os.path.join("outputs", "recoupling")
     output_path = os.path.join("outputs", "parametrization")
 
-    # for scenario_name in ["WB_debug_250_r15_debug_unbal"]:
-    # for scenario_name in ["WB_debug_250_r16_debug_unbal"]:
-    # for scenario_name in ["WB_debug2_250_r72_debug"]:
-    # for scenario_name in ["WB_debug5_250_kx3rfx2"]:
-    for scenario_name in ["WB_debug5_250_krfvx6"]:
-    # for scenario_name in ["WB_debug2_250_r43_debug"]:
-    # for scenario_name in ["WB_ref_250_r12_ref_unbal"]:
-    # for scenario_name in ["WB_ref_250_r12_ref_unbal", "WB_debug_250_r15_debug_unbal"]:
-    # for scenario_name in ["WB_ref_250_r3_heavy"]:
+    for scenario_name in ["WB_defense1_250_def2.2"]:
+    # for scenario_name in ["WB_defense1_250_dbg_bal_1.1"]:
+    # for scenario_name in ["WB_def_soil_1_250_3d_2.1"]:
+
         # subscenarios = [subsc for subsc in os.listdir(os.path.join(output_path, scenario_name)) if subsc not in ["Soil", "Soil *", "Delete_to_Stop"]]
         subscenarios = ["WheatBRIDGES_0_" + scenario_name]
         for subscenario in subscenarios:
             print("analysing", subscenario)
-            if False:
+            if True:
                 analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                 inputs_dirpath="inputs",
                                 on_sums=True)
                 
-            if False:
+            if True:
                 try:
                     analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                     inputs_dirpath="inputs",
@@ -50,9 +45,8 @@ if __name__ == '__main__':
                                 on_mtg=True)
 
 
-        do_soil=False
-        if do_soil:
-            analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key="Soil",
-                                    inputs_dirpath="inputs",
-                                    on_sums=True,
-                                    on_soil_logs=False)
+            if False:
+                analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key="Soil",
+                                        inputs_dirpath="inputs",
+                                        on_sums=True,
+                                        on_soil_logs=True)

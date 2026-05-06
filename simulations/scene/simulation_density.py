@@ -17,13 +17,10 @@ from openalea.fspm.utility.plot import analyze_data
 
 
 if __name__ == "__main__":
-    # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_ref"])
-    # custom_suffix = "r12_ref_unbal"
-    # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug"])
-    # scenarios = ms.from_table(file_path="inputs/Scenarios_25-08-05.xlsx", which=["WB_debug2"])
-    scenarios = ms.from_table(file_path="inputs/Scenarios_25-11-01.xlsx", which=["WB_debug6"])
+    scenarios = ms.from_table(file_path="inputs/Scenarios_25-11-01.xlsx", which=["WB_defense1"])
     # custom_suffix = "r19_debug_inter"
-    custom_suffix = "krfvx6_2"
+    # custom_suffix = "def2.7"
+    custom_suffix = "dbg_bal_1.1"
     output_folder = "outputs/parametrization"
     # densities = [50, 200, 400]
     # densities = [50, 400]
@@ -81,7 +78,7 @@ if __name__ == "__main__":
                 clean_exit = play_Orchestra(scene_name=full_scenario_name, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                     soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
                                     translator_path=openalea.wheatbridges.__path__[0],
-                                    logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=6,
+                                    logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=48,
                                     scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                     # time_step=3600, n_iterations=500, record_performance=True)
                                     time_step=3600, n_iterations=2500, record_performance=True, log_only_one=True)
@@ -91,7 +88,7 @@ if __name__ == "__main__":
                     pickle.dump(scenario, f)
 
                 if clean_exit:
-                    subscenarios = [subsc for subsc in os.listdir(os.path.join(output_folder, full_scenario_name)) if subsc not in ["Soil", "Delete_to_Stop"]]
+                    subscenarios = [subsc for subsc in os.listdir(os.path.join(output_folder, full_scenario_name)) if subsc not in ["Soil", "Delete_to_Stop", "input_scenario.pckl"]]
                     for subscenario in subscenarios:
                         print("analysing", subscenario)
                         analyze_data(scenarios=[full_scenario_name], outputs_dirpath=output_folder, target_folder_key=subscenario,
