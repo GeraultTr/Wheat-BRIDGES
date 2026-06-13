@@ -77,6 +77,4 @@ __pycache__/
 # Ignore egg-info
 *.egg-info/
 
-
-
 *.vscode/
