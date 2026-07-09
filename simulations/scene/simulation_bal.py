@@ -20,10 +20,11 @@ if __name__ == "__main__":
     scenarios = ms.from_table(file_path="inputs/Scenarios_25-11-01.xlsx", which=["WB_defense1"])
     custom_suffix = "dbg_bal_1.1"
     output_folder = "/home/torisuten/Documents/outputs/wbr_outputs/test"
-    time_step_in_seconds = 3600 / 4
-    simulation_length_in_days = 30
-    n_iterations = int((simulation_length_in_days * 24 * 3600) / time_step_in_seconds) + 1
-    densities = [1]
+    time_step_in_seconds = 3600
+    simulation_length_in_days = 20
+    # n_iterations = int((simulation_length_in_days * 24 * 3600) / time_step_in_seconds) + 1
+    n_iterations = 2500
+    densities = [250]
     
     scene_xrange = 0.15
     scene_yrange = 0.15

@@ -72,7 +72,7 @@ class WheatBRIDGES(CompositeModel):
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step, **root_parameters)
         self.root_cn = RootCNUnified(self.g_root, time_step, **root_parameters)
-        self.shoot = WheatFSPM(root_mtg=self.g_root, computing_light_interception=False, **scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False,
+        self.shoot = WheatFSPM(root_mtg=self.g_root, computing_light_interception=False, **scenario_utility(time_step_in_seconds=time_step, INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False,
                                                                         update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 

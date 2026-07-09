@@ -8,10 +8,10 @@ from openalea.fspm.utility.writer.visualize import post_compress_gltf
 
 if __name__ == '__main__':
     
-    # output_path = os.path.join("outputs", "recoupling")
-    output_path = os.path.join("outputs", "parametrization")
+    output_path = "/home/torisuten/Documents/outputs/wbr_outputs/test"
+    # output_path = os.path.join("outputs", "parametrization")
 
-    for scenario_name in ["WB_defense1_250_def2.2"]:
+    for scenario_name in ["WB_defense1_1_dbg_bal_1.1"]:
     # for scenario_name in ["WB_defense1_250_dbg_bal_1.1"]:
     # for scenario_name in ["WB_def_soil_1_250_3d_2.1"]:
 
@@ -19,22 +19,22 @@ if __name__ == '__main__':
         subscenarios = ["WheatBRIDGES_0_" + scenario_name]
         for subscenario in subscenarios:
             print("analysing", subscenario)
-            if True:
+            if False:
                 analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                 inputs_dirpath="inputs",
                                 on_sums=True)
                 
             if True:
-                try:
-                    analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
-                                    inputs_dirpath="inputs",
-                                    on_shoot_logs=True)
-                except Exception as e:
-                    print("encountered:", e)
-                finally:    
-                    print("Finished shoot")
+                # try:
+                analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
+                                inputs_dirpath="inputs",
+                                on_shoot_logs=True)
+                # except Exception as e:
+                #     print("encountered:", e)
+                # finally:    
+                #     print("Finished shoot")
 
-            if True:
+            if False:
                 analyze_data(scenarios=[scenario_name], outputs_dirpath=output_path, target_folder_key=subscenario,
                                 inputs_dirpath="inputs",
                                 animate_raw_logs=True)
