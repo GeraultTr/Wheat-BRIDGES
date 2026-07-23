@@ -258,18 +258,16 @@ WheatFSPM:
   RootAnatomy: {}
 
   RootCNUnified:
-    sucrose:
-      total_sucrose_phloem: 12 * 1000000
     mstruct:
       total_living_struct_mass: 1.0
     Export_Amino_Acids:
       AA_root_to_shoot_xylem: 1.4 * 1000000 * 3600
     Export_Nitrates:
       Nm_root_to_shoot_xylem: 1000000 * 3600
-    Unloading_Amino_Acids_phloem:
-      AA_root_to_shoot_phloem: -1.4 * 1000000 * 3600
-    Unloading_Sucrose_phloem:
-      sucrose_root_to_shoot_phloem: -12 * 1000000 * 3600
+    sucrose_phloem_outside_solve: # Bidirectionnal sharing
+      sucrose_phloem_shoot: 1000000 * 12
+    amino_acids_phloem_outside_solve:
+      AA_phloem_shoot: 1000000 * 1.4
     cytokinins:
       total_cytokinins: 1.0
 
