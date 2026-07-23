@@ -24,7 +24,7 @@ if __name__ == "__main__":
     simulation_length_in_days = 20
     # n_iterations = int((simulation_length_in_days * 24 * 3600) / time_step_in_seconds) + 1
     n_iterations = 2500
-    densities = [250]
+    densities = [1]
     
     scene_xrange = 0.15
     scene_yrange = 0.15
