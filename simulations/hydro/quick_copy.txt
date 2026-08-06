@@ -1,0 +1,1 @@
+rsync -avh --progress -L --dry-run /home/tigerault/work/Wheat-BRIDGES_framework/Wheat-BRIDGES/simulations/scene/outputs/parametrization/WB_debug2_250_r68_debug ~/save/wb_outputs/

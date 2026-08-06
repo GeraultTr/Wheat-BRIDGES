@@ -1,4 +1,4 @@
-# Wheat-BRIDGES: Biogeochemical Rhizospherous Integration by Development and Growth of Environmental Signals applied to a whole plant of wheat
+# Grass-BRIDGES: Balanced Resource Integration Dynamically adjusted to Growing plant architecture, Environmental heterogeneity and Shoot–root interactions, applied to a whole Poaceae plant
 
 A whole plant FSPM vs heterogeneous environment models to study the plastic response of the plant arising from the variability of local organs functioning
 

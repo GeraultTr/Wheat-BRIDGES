@@ -28,7 +28,6 @@ dependencies:
   - openalea.caribu
   - openalea.astk
   - openalea.plantgl
-  - openalea.adel
 
   # Visuals
   - pyvista
