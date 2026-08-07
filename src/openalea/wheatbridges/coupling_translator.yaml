@@ -23,7 +23,7 @@ RootAnatomy:
 
   SoilModel: {}
 
-  WheatFSPM: {}
+  CNW_Grass: {}
 
 
 
@@ -113,7 +113,7 @@ RootCNUnified:
     Nm_fungus:
       microbial_N: 1.0
 
-  WheatFSPM:
+  CNW_Grass:
     mstruct_axis_shoot:
       mstruct_axis: 1.0
     sucrose_phloem_shoot:
@@ -147,7 +147,7 @@ RootGrowthModelCoupled:
     soil_temperature:
       soil_temperature: 1.0
 
-  WheatFSPM:
+  CNW_Grass:
     adventitious_to_emerge:
       adventitious_to_emerge: 1.0
 
@@ -201,7 +201,7 @@ RootWaterModel:
     Cv_solutes_soil:
       Cv_solutes_soil: 1.0
 
-  WheatFSPM:
+  CNW_Grass:
     water_root_shoot_xylem:
       Total_Transpiration: 0.001 * 18.07 / 1000000
 
@@ -254,11 +254,11 @@ SoilModel:
 
   SoilModel: {}
 
-  WheatFSPM: {}
+  CNW_Grass: {}
 
 
 
-WheatFSPM:
+CNW_Grass:
   RootAnatomy: {}
 
   RootCNUnified:
@@ -281,4 +281,4 @@ WheatFSPM:
 
   SoilModel: {}
 
-  WheatFSPM: {}
+  CNW_Grass: {}
