@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
             clean_exit = play_Orchestra(scene_name=full_scenario_name, output_folder=output_folder, plant_models=[WheatBRIDGES], plant_scenarios=[scenario], 
                                 soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
-                                translator_path=openalea.wheatbridges.__path__[0],
+                                translator_path=os.path.join(openalea.wheatbridges.__path__[0], 'cn_coupling.yaml'),
                                 logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=48,
                                 scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
                                 time_step=time_step_in_seconds, n_iterations=n_iterations, record_performance=True, log_only_one=True)
