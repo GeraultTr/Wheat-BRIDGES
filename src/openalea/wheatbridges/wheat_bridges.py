@@ -1,22 +1,27 @@
-import openalea.wheatbridges
+from multiprocessing.shared_memory import SharedMemory
+import numpy as np
+from openalea.metafspm.utils import ArrayDict, mtg_to_arraydict
 
 # Edited models
 from openalea.rootbridges import RootCNUnified
 from openalea.rootbridges import RootGrowthModelCoupled
-from openalea.rootbridges import SoilModel
 
 # Untouched models
-from openalea.rhizodep import RootAnatomy
+from openalea.rootcynaps import RootAnatomy
 from openalea.rootcynaps import RootWaterModel
 
 # Shoot Model
 from openalea.fspmwheat.cnwheat_composite import WheatFSPM, scenario_utility
-from openalea.wheatbridges import cn_wheat_collar
 
 # Utilities
 from openalea.metafspm.composite_wrapper import CompositeModel
 from openalea.metafspm.component_factory import Choregrapher
+from openalea.fspm.utility.writer.visualize import plot_mtg
+from openalea.adel.adel import Adel
+from openalea.caribu.plantgl_adaptor import scene_to_cscene
 
+
+debug = False
 
 class WheatBRIDGES(CompositeModel):
     """
@@ -32,7 +37,9 @@ class WheatBRIDGES(CompositeModel):
     4. Use Model.run() in a for loop to perform the computations of a time step on the passed MTG File
     """
 
-    def __init__(self, name="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], **scenario):
+    def __init__(self, queues_soil_to_plants, queue_plants_to_soil, 
+                queues_light_to_plants, queue_plants_to_light,
+                name: str="Plant", time_step: int=3600, coordinates: list=[0, 0, 0], rotation: float=0, translator_path: dict = {}, **scenario):
         """
         DESCRIPTION
         ----------
@@ -43,6 +50,9 @@ class WheatBRIDGES(CompositeModel):
         """
         # DECLARE GLOBAL SIMULATION TIME STEP, FOR THE CHOREGRAPHER TO KNOW IF IT HAS TO SUBDIVIDE TIME-STEPS
         self.name = name
+        self.coordinates = coordinates
+        self.rotation = rotation
+
         Choregrapher().add_simulation_time_step(time_step)
         self.time = 0
 
@@ -56,18 +66,32 @@ class WheatBRIDGES(CompositeModel):
         else:
             self.root_growth = RootGrowthModelCoupled(g=None, time_step=time_step, **root_parameters)
         self.g_root = self.root_growth.g
+        # We have to update the coordinates of the new / imported MTG for other model's initialization
+        plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
         self.root_anatomy = RootAnatomy(self.g_root, time_step, **root_parameters)
         self.root_water = RootWaterModel(self.g_root, time_step, **root_parameters)
         self.root_cn = RootCNUnified(self.g_root, time_step, **root_parameters)
-        self.soil = SoilModel(self.g_root, time_step, **root_parameters)
-        self.soil_voxels = self.soil.voxels
-        self.shoot = WheatFSPM(root_mtg=self.g_root, **scenario_utility(INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False, update_parameters_all_models=parameters))
+        self.shoot = WheatFSPM(root_mtg=self.g_root, computing_light_interception=False, **scenario_utility(time_step_in_seconds=time_step, INPUTS_DIRPATH="inputs", stored_times="all", isolated_roots=True, cnwheat_roots=False,
+                                                                        update_parameters_all_models=parameters))
         self.g_shoot = self.shoot.g
 
+        components = (self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.shoot)
+        descriptors = []
+        for c in components:
+            descriptors += c.descriptor
+        # descriptors.remove("vertex_index")
+
+        # NOTE : Important that this type conversion occurs after initiation of the modules
+        # AND BEFORE THE COUPLING FOR ALIASES TO REMAIN UNBROKEN!
+        mtg_to_arraydict(self.g_root, ignore=descriptors)
+        
         # LINKING MODULES
-        self.declare_data_and_couple_components(root=self.g_root, shoot=self.g_shoot, soil=self.soil_voxels,
-                                                translator_path=openalea.wheat_bridges.__path__[0],
-                                                components=(self.root_growth, self.root_anatomy, self.root_water, self.root_cn, self.soil, self.shoot))
+        self.declare_data_and_couple_components(root=self.g_root, shoot=self.g_shoot,
+                                                translator_path=translator_path,
+                                                components=components)
+        
+        self.soil_handshake = {v: k for k, v in enumerate(self.plant_side_soil_inputs + self.soil_outputs)}
+        # print(self.soil_handshake)
         
         # Specific here TODO remove later
         self.root_water.collar_children = self.root_growth.collar_children
@@ -75,18 +99,73 @@ class WheatBRIDGES(CompositeModel):
         self.root_cn.collar_children = self.root_growth.collar_children
         self.root_cn.collar_skip = self.root_growth.collar_skip
 
+        # Provide signature for the MTG
+        # Retreive the queues to communicate with environment models
+        self.queues_soil_to_plants=queues_soil_to_plants
+        self.queue_plants_to_soil=queue_plants_to_soil
+        self.queues_light_to_plants=queues_light_to_plants
+        self.queue_plants_to_light=queue_plants_to_light
+
+        # Get properties from each MTG
+        self.root_props = self.g_root.properties()
+        self.shoot_props = self.g_shoot.properties()
+        
+        # Performed in initialization and run to update coordinates
+        plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
+
+        self.name = name
+        # ROOT PROPERTIES INITIAL PASSING IN MTG
+        self.root_props["plant_id"] = name
+        self.root_props["model_name"] = self.__class__.__name__
+        self.model_name = self.__class__.__name__
+        self.carried_components = [component.__class__.__name__ for component in self.components]
+
+        shm = SharedMemory(name=self.name)
+        buf = np.ndarray((35,20000), dtype=np.float64, buffer=shm.buf)
+        # print(buf)
+        for name in self.plant_side_soil_inputs:
+            value = self.root_props[name]
+            if isinstance(value, ArrayDict):
+                buf[self.soil_handshake[name],:len(value)] = value.values_array()
+            else:
+                print(name, "should be passed")
+        
+        shm.close()
+        self.queue_plants_to_soil.put({"plant_id": self.name, "model_name": self.model_name, "carried_components": self.carried_components, "handshake": self.soil_handshake})
+
+        # SHOOT ARCHITECTURE INITIAL PASSING
+        # NOTE : Here we pass the tesselated scene since otherwise plantgl rotated geometries are not pickable
+        # Get scene from Adel and then convert it to triangles as it is pickable
+        scene = Adel.scene(self.g_shoot)
+        c_scene = scene_to_cscene(scene)
+
+        selective_light_inputs = {"coordinates": self.coordinates,
+                                "rotation": self.rotation,
+                                "scene": c_scene,
+                                "class_name": {vid: self.g_shoot.class_name(vid) for vid in self.g_shoot.property('geometry').keys()}}
+        self.queue_plants_to_light.put({"plant_id": self.name, "data": selective_light_inputs})
+
+        # Retreive post environments init states
+        self.get_environment_boundaries()
+
+        # Send command to environments models to run first
+        self.send_plant_status_to_environment()
+
+        # TP
+        self.root_props["parent_id"] = ArrayDict(self.root_props["parent_id"])
+
 
     def run(self):
         self.apply_input_tables(tables=self.input_tables, to=self.components, when=self.time)
 
-        # Compute shoot flows and state balance for CN-wheat
-        self.shoot()
-
-        # Compute root growth from resulting states
-        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"])
+        # Retrieve soil and light status for plant
+        self.get_environment_boundaries()
         
-        self.soil.compute_mtg_voxel_neighbors()
-        self.soil.get_from_voxel()
+        # Compute root growth from resulting states
+        self.root_growth(modules_to_update=[c for c in self.components if c.__class__.__name__ != "RootGrowthModelCoupled" and c.__class__.__name__ != "WheatFSPM"], soil_boundaries_to_infer=self.soil_outputs)
+        
+        # Update MTG coordinates accounting for position in the scene
+        plot_mtg(self.g_root, position=self.coordinates, rotation=self.rotation)
 
         # Update topological surfaces and volumes based on other evolved structural properties
         self.root_anatomy()
@@ -95,7 +174,65 @@ class WheatBRIDGES(CompositeModel):
         self.root_water()
         self.root_cn()
 
-        # Update environment boundary conditions
-        self.soil()
+        # print("inputs_to_shoot : ", self.root_props["total_sucrose_phloem"][1], self.root_props["total_living_struct_mass"][1], self.root_props["AA_root_to_shoot_xylem"][1], self.root_props["Nm_root_to_shoot_xylem"][1], self.root_props["total_cytokinins"][1])
+
+        # Compute shoot flows and state balance for CN-wheat
+        self.shoot()
+
+        # Send plant status to soil and light models
+        self.send_plant_status_to_environment()
 
         self.time += 1
+
+
+    def get_environment_boundaries(self):
+        # Wait for results from both soil and light model before begining
+        soil_boundary_props = self.queues_soil_to_plants[self.name].get()
+        light_boundary_props = self.queues_light_to_plants[self.name].get()
+
+        # NOTE : here you have to perform a per-variable update otherwise dynamic links are broken
+        shm = SharedMemory(name=self.name)
+        buf = np.ndarray((35,20000), dtype=np.float64, buffer=shm.buf)
+        vertices = buf[self.soil_handshake["vertex_index"]]
+        vertices_mask = vertices >= 1
+        for variable_name in self.soil_outputs: # TODO : soil_outputs come from declare_data_and_couple_components, not a good structure to keep
+            # print(len(self.root_props[variable_name]))
+            if variable_name not in self.root_props.keys(): # Actually used? I am not sure
+                self.root_props[variable_name] = ArrayDict()
+            
+            # self.root_props[variable_name].assign_all(buf[self.soil_handshake[variable_name]][vertices_mask])
+            self.root_props[variable_name].scatter(vertices[vertices_mask], buf[self.soil_handshake[variable_name]][vertices_mask])
+            
+        shm.close()
+
+        for variable_name in light_boundary_props.keys():
+            if variable_name not in self.shoot_props.keys():
+                self.shoot_props[variable_name] = {}
+            self.shoot_props[variable_name].update(light_boundary_props[variable_name])
+
+
+    def send_plant_status_to_environment(self):
+        shm = SharedMemory(name=self.name)
+        buf = np.ndarray((35,20000), dtype=np.float64, buffer=shm.buf)
+        # print(buf)
+        for name in self.plant_side_soil_inputs:
+            value = self.root_props[name]
+            if isinstance(value, ArrayDict):
+                buf[self.soil_handshake[name],:len(value)] = value.values_array()
+            else:
+                print(name, "should be passed")
+        
+        shm.close()
+
+        self.queue_plants_to_soil.put({"plant_id": self.name, "model_name": self.model_name, "handshake": self.soil_handshake})
+
+        # Get scene from Adel and then convert it to triangles as it is pickable
+        scene = Adel.scene(self.g_shoot)
+        c_scene = scene_to_cscene(scene)
+
+        selective_light_inputs = {"coordinates": self.coordinates,
+                                "rotation": self.rotation,
+                                "scene": c_scene,
+                                "class_name": {vid: self.g_shoot.class_name(vid) for vid in self.g_shoot.property('geometry').keys()}}
+        
+        self.queue_plants_to_light.put({"plant_id": self.name, "data": selective_light_inputs})

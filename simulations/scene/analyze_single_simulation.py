@@ -13,6 +13,7 @@ if __name__ == '__main__':
         output_path = "outputs" 
         # output_path = "simulations/scene/outputs" # When debugging
 
+        output_folder = "/home/torisuten/Documents/outputs/wbr_outputs/test"
         mtg_path = os.path.join(output_path, scenario_name, target_folder_key, "MTG_files")
         # mtg_path = os.path.join("/home/torisuten/package/Wheat-BRIDGES/Root_BRIDGES/simulations/scene/outputs/RB_ref/RootBRIDGES_0", "MTG_files")
 

@@ -43,7 +43,7 @@ class LightModel:
     def run(self, queues_light_to_plants, queue_plants_to_light):
         PARi = self.meteo.loc[self.time, ['PARi']].iloc[0]
         DOY = self.meteo.loc[self.time, ['DOY']].iloc[0]
-        hour = self.meteo.loc[self.time, ['hour']].iloc[0]
+        hour = self.meteo.loc[self.time, ['hour']].iloc[0] 
         PARi_next_hours = self.meteo.loc[range(self.time, self.time + self.CARIBU_TIMESTEP), ['PARi']].sum().values[0]
         
         t1 = time.time()
