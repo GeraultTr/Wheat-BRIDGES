@@ -118,8 +118,12 @@ RootCNUnified:
       mstruct_axis: 1.0
     sucrose_phloem_shoot:
       sucrose_phloem: 0.000001 / 12
+    sucrose_phloem_contributors_flow:
+      Unloading_Sucrose_shoot_organs: 0.000001 / 3600 / 12 # inflow convention
     AA_phloem_shoot:
       amino_acids_phloem: 0.000001 / 1.4
+    AA_phloem_contributors_flow:
+      Unloading_Amino_Acids_shoot_organs: 0.000001 / 3600 / 1.4 # inflow convention
     cytokinins_root_shoot_xylem:
       Export_cytokinins: 1.0
 
@@ -258,8 +262,6 @@ WheatFSPM:
   RootAnatomy: {}
 
   RootCNUnified:
-    sucrose:
-      total_sucrose_phloem: 12 * 1000000
     mstruct:
       total_living_struct_mass: 1.0
     Export_Amino_Acids:
@@ -267,9 +269,9 @@ WheatFSPM:
     Export_Nitrates:
       Nm_root_to_shoot_xylem: 1000000 * 3600
     Unloading_Amino_Acids_phloem:
-      AA_root_to_shoot_phloem: -1.4 * 1000000 * 3600
+      AA_root_to_shoot_phloem: -1.4 * 1000000 * 3600 # minus respect to flow direction convention
     Unloading_Sucrose_phloem:
-      sucrose_root_to_shoot_phloem: -12 * 1000000 * 3600
+      sucrose_root_to_shoot_phloem: -12 * 1000000 * 3600 # minus respect to flow direction convention
     cytokinins:
       total_cytokinins: 1.0
 
