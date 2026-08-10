@@ -19,12 +19,12 @@ include-package-data = true # force explicit declaration of data (disable automa
 [tool.setuptools_scm]
 
 [project]
-name = "openalea.wheatbridges"
+name = "openalea.grassbridges"
 authors = [
   { name = "Tristan Gérault", email = "tristan.gerault@inrae.fr" },
   { name = "Christophe Pradal", email = "christophe.pradal@inria.fr" }
 ]
-description = "Wheat-BRIDGES is a 3D wheat carbon, nitrogen, growth, water and anatomy FSPM in OpenAlea"
+description = "Grass-BRIDGES is a 3D grass carbon, nitrogen, growth, water and anatomy FSPM in OpenAlea"
 readme = "README.md"
 license = "CECILL-C"
 license-files = ["LICEN[CS]E*"]
@@ -108,7 +108,7 @@ doc = [
 ]
 
 [project.urls]
-Repository = "https://github.com/GeraultTr/wheat-bridges"
+Repository = "https://github.com/openalea/grass-bridges"
 
 [project.entry-points."wralea"]
-"my_pkg" = "openalea.wheatbridges_wralea"
+"my_pkg" = "openalea.grassbridges_wralea"

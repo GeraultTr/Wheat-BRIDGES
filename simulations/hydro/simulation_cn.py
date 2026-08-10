@@ -6,7 +6,7 @@ import pickle
 # Model packages
 import openalea.wheatbridges
 from openalea.rhizosoil.model import RhizoSoil
-from openalea.wheatbridges import WheatBRIDGES
+from openalea.wheatbridges import GrassBRIDGES
 from openalea.wheatbridges import LightModel
 
 # Utility packages

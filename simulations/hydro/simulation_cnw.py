@@ -4,10 +4,10 @@ import os
 import pickle
 
 # Model packages
-import openalea.wheatbridges
+import openalea.grassbridges
 from openalea.rhizosoil.model import RhizoSoil
-from openalea.wheatbridges.grass_bridges import GrassBRIDGES
-from openalea.wheatbridges import LightModel
+from openalea.grassbridges import GrassBRIDGES
+from openalea.grassbridges import LightModel
 
 # Utility packages
 from openalea.fspm.utility.scenario.initialize import MakeScenarios as ms
@@ -29,6 +29,7 @@ if __name__ == "__main__":
     scene_xrange = 0.15
     scene_yrange = 0.15
     row_spacing = 0.15
+    sowing_depth = [0.025]
 
     for target_density in densities:
         for scenario_name, scenario in scenarios.items():
@@ -37,9 +38,9 @@ if __name__ == "__main__":
 
             clean_exit = play_Orchestra(scene_name=full_scenario_name, output_folder=output_folder, plant_models=[GrassBRIDGES], plant_scenarios=[scenario], 
                                 soil_model=RhizoSoil, soil_scenario=scenario, light_model=LightModel,
-                                translator_path=os.path.join(openalea.wheatbridges.__path__[0], 'cnw_coupling.yaml'),
+                                translator_path=os.path.join(openalea.grassbridges.__path__[0], 'cnw_coupling.yaml'),
                                 logger_class=Logger, log_settings=Logger.heavy_log, heavy_log_period=48,
-                                scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing,
+                                scene_xrange=scene_xrange, scene_yrange=scene_yrange, sowing_density=target_density, row_spacing=row_spacing, sowing_depth=sowing_depth,
                                 time_step=time_step_in_seconds, n_iterations=n_iterations, record_performance=True, log_only_one=True)
             
             # In any situation, save the inputs in the output folder
