@@ -203,7 +203,7 @@ RootWaterModel:
 
   CNW_Grass:
     water_root_shoot_xylem:
-      Total_Transpiration: 0.001 * 18.07 / 1000000
+      water_outflux: 0.000001 / 3600 # g per time step to m3 per second
 
 
 SoilModel:
@@ -277,7 +277,9 @@ CNW_Grass:
 
   RootGrowthModelCoupled: {}
 
-  RootWaterModel: {}
+  RootWaterModel:
+    xylem_water_potential_collar:
+      xylem_pressure_out: 0.000001 # Pa to MPa
 
   SoilModel: {}
 
